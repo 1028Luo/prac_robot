@@ -25,7 +25,7 @@ endif()
 
 
 install(DIRECTORY
-  launch
+  launch description config
   DESTINATION share/prac_robot/
 )
 

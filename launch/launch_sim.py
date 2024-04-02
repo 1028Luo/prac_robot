@@ -14,7 +14,7 @@ import xacro
 
 
 def generate_launch_description():
-
+    
 
     use_sim_time = LaunchConfiguration('use_sim_time')
     use_ros2_control = LaunchConfiguration('use_ros2_control')
@@ -23,11 +23,20 @@ def generate_launch_description():
     pkg_path = get_package_share_directory(pkg_name)
 
     ## xarco to URDF
+    print('aaa1\n')
     xacro_path = os.path.join(pkg_path, 'description', 'prac_robot.urdf.xacro')
-    robot_description_config = Command(['xacro', xacro_path, 'use_ros2_control:=', use_ros2_control,'sim_mode:=', use_sim_time])
-
-
+    print('bbb4\n')
+    #robot_description_config = xacro.process_file(xacro_path, mappings={"use_ros2_control": use_ros2_control, "sim_mode": use_sim_time}).toxml()
+    #robot_description_config = Command(['xacro', xacro_path, 'use_ros2_control:=', use_ros2_control,'sim_mode:=', use_sim_time])
+    robot_description_config = 'diff_drive_robot.urdf'
+    print('ddd1\n')
     ## launch robot state publisher
+
+    ### check this
+    #https://answers.ros.org/question/404549/unable-to-parse-urdf-using-command-line-but-can-do-it-in-launch-file/
+    
+    
+    
     params = {'robot_description':robot_description_config, 'use_sim_time': use_sim_time}
     node_robot_state_publisher = Node(
         package='robot_state_publisher',
@@ -36,7 +45,7 @@ def generate_launch_description():
         parameters=[params]
     )
 
-
+    
     x_pose = LaunchConfiguration('x_pose', default='0.0')
     y_pose = LaunchConfiguration('y_pose', default='0.0')
     z_pose = LaunchConfiguration('z_pose', default='0.5')
@@ -58,17 +67,17 @@ def generate_launch_description():
         arguments=[
             '-world', 'messy_world',
             '-name', 'diff_drive_robot',
-            '-topic', 'robot_description',
+            '-topic', 'robot_description', #use topic entry##
             '-x', x_pose,
             '-y', y_pose,
             '-z', z_pose
-            #use topic entry##
         ],
         output='screen',
     )
     
 
-    return LaunchDescription([DeclareLaunchArgument(
+    return LaunchDescription([
+        DeclareLaunchArgument(
         'use_sim_time',
         default_value='false',
         description='Use sim time if true'),
