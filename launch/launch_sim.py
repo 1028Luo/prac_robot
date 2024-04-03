@@ -24,11 +24,12 @@ def generate_launch_description():
 
     ## xarco to URDF
     print('aaa1\n')
-    xacro_path = os.path.join(pkg_path, 'description', 'prac_robot.urdf.xacro')
+    xacro_path = os.path.join(pkg_path, 'description', 'example_robot.urdf.xacro')
+    world_path = os.path.join(pkg_path, 'description', 'messy_world.sdf')
     print('bbb4\n')
-    #robot_description_config = xacro.process_file(xacro_path, mappings={"use_ros2_control": use_ros2_control, "sim_mode": use_sim_time}).toxml()
+    robot_description_config = xacro.process_file(xacro_path, mappings={"use_ros2_control": use_ros2_control, "sim_mode": use_sim_time}).toxml()
     #robot_description_config = Command(['xacro', xacro_path, 'use_ros2_control:=', use_ros2_control,'sim_mode:=', use_sim_time])
-    robot_description_config = 'diff_drive_robot.urdf'
+    #robot_description_config = 'diff_drive_robot.urdf'
     print('ddd1\n')
     ## launch robot state publisher
 
@@ -58,7 +59,7 @@ def generate_launch_description():
     gz_sim = IncludeLaunchDescription(
         PythonLaunchDescriptionSource(
             os.path.join(pkg_ros_gz_sim, 'launch', 'gz_sim.launch.py')),
-        launch_arguments={'gz_args': 'messy_world.sdf'}.items(),
+        launch_arguments={'gz_args': world_path}.items(),
     )
     
     gz_create = Node(
