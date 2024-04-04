@@ -3,7 +3,7 @@ import os
 
 from ament_index_python.packages import get_package_share_directory
 from launch import LaunchDescription
-from launch.actions import DeclareLaunchArgument
+from launch.actions import DeclareLaunchArgument, ExecuteProcess
 from launch.actions import IncludeLaunchDescription
 from launch.launch_description_sources import PythonLaunchDescriptionSource
 from launch.substitutions import LaunchConfiguration, Command
@@ -16,7 +16,7 @@ import xacro
 def generate_launch_description():
     
 
-    use_sim_time = LaunchConfiguration('use_sim_time')
+    use_sim_time = LaunchConfiguration('use_sim_time', default=True)
     use_ros2_control = LaunchConfiguration('use_ros2_control')
 
     pkg_name = 'prac_robot'
@@ -24,10 +24,10 @@ def generate_launch_description():
 
     ## xarco to URDF
     print('aaa1\n')
-    xacro_path = os.path.join(pkg_path, 'description', 'example_robot.urdf.xacro')
+    xacro_path = os.path.join(pkg_path, 'description', 'prac_robot.urdf.xacro')
     world_path = os.path.join(pkg_path, 'description', 'messy_world.sdf')
     print('bbb4\n')
-    robot_description_config = xacro.process_file(xacro_path, mappings={"use_ros2_control": use_ros2_control, "sim_mode": use_sim_time}).toxml()
+    robot_description_config = xacro.process_file(xacro_path, mappings={"sim_mode": use_sim_time}).toxml()
     #robot_description_config = Command(['xacro', xacro_path, 'use_ros2_control:=', use_ros2_control,'sim_mode:=', use_sim_time])
     #robot_description_config = 'diff_drive_robot.urdf'
     print('ddd1\n')
@@ -76,6 +76,18 @@ def generate_launch_description():
         output='screen',
     )
     
+
+    load_joint_state_controller = ExecuteProcess(
+        cmd=['ros2', 'control', 'load_controller', '--set-state', 'active',
+             'joint_state_broadcaster'],
+        output='screen'
+    )
+
+    load_diff_drive_controller = ExecuteProcess(
+        cmd=['ros2', 'control', 'load_controller', '--set-state', 'active',
+             'diff_drive_base_controller'],
+        output='screen'
+    )
 
     return LaunchDescription([
         DeclareLaunchArgument(
