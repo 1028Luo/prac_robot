@@ -3,8 +3,11 @@ import os
 
 from ament_index_python.packages import get_package_share_directory
 from launch import LaunchDescription
-from launch.actions import DeclareLaunchArgument, ExecuteProcess
+from launch.actions import DeclareLaunchArgument, ExecuteProcess, RegisterEventHandler
 from launch.actions import IncludeLaunchDescription
+
+from launch.event_handlers import OnProcessExit
+
 from launch.launch_description_sources import PythonLaunchDescriptionSource
 from launch.substitutions import LaunchConfiguration, Command
 
@@ -17,27 +20,21 @@ def generate_launch_description():
     
 
     use_sim_time = LaunchConfiguration('use_sim_time', default=True)
-    use_ros2_control = LaunchConfiguration('use_ros2_control')
+
 
     pkg_name = 'prac_robot'
     pkg_path = get_package_share_directory(pkg_name)
-
-    ## xarco to URDF
-    print('aaa1\n')
+    pkg_ros_gz_sim = get_package_share_directory('ros_gz_sim')
+    
+    # description path
     xacro_path = os.path.join(pkg_path, 'description', 'prac_robot.urdf.xacro')
     world_path = os.path.join(pkg_path, 'description', 'messy_world.sdf')
-    print('bbb4\n')
-    robot_description_config = xacro.process_file(xacro_path, mappings={"sim_mode": use_sim_time}).toxml()
-    #robot_description_config = Command(['xacro', xacro_path, 'use_ros2_control:=', use_ros2_control,'sim_mode:=', use_sim_time])
-    #robot_description_config = 'diff_drive_robot.urdf'
-    print('ddd1\n')
-    ## launch robot state publisher
 
-    ### check this
-    #https://answers.ros.org/question/404549/unable-to-parse-urdf-using-command-line-but-can-do-it-in-launch-file/
-    
-    
-    
+
+    # xarco to URDF
+    robot_description_config = xacro.process_file(xacro_path, mappings={"sim_mode": use_sim_time}).toxml()
+
+    # launch robot state publisher
     params = {'robot_description':robot_description_config, 'use_sim_time': use_sim_time}
     node_robot_state_publisher = Node(
         package='robot_state_publisher',
@@ -46,22 +43,20 @@ def generate_launch_description():
         parameters=[params]
     )
 
-    
+    # define robot spawn position
     x_pose = LaunchConfiguration('x_pose', default='0.0')
     y_pose = LaunchConfiguration('y_pose', default='0.0')
     z_pose = LaunchConfiguration('z_pose', default='0.5')
 
 
-
-    pkg_ros_gz_sim = get_package_share_directory('ros_gz_sim')
-
-
+    # launch gazebo with environment
     gz_sim = IncludeLaunchDescription(
         PythonLaunchDescriptionSource(
             os.path.join(pkg_ros_gz_sim, 'launch', 'gz_sim.launch.py')),
         launch_arguments={'gz_args': world_path}.items(),
     )
     
+    # spawn robot from topic
     gz_create = Node(
         package='ros_gz_sim',
         executable='create',
@@ -76,30 +71,53 @@ def generate_launch_description():
         output='screen',
     )
     
-
+    # launch joint_state_broadcaster 
     load_joint_state_controller = ExecuteProcess(
         cmd=['ros2', 'control', 'load_controller', '--set-state', 'active',
              'joint_state_broadcaster'],
         output='screen'
     )
 
+
+    # launch diff_drive_base_controller
     load_diff_drive_controller = ExecuteProcess(
         cmd=['ros2', 'control', 'load_controller', '--set-state', 'active',
              'diff_drive_base_controller'],
         output='screen'
     )
 
+    # need this bridge, otherwise control 2 teleop won't work
+    bridge = Node(
+        package='ros_gz_bridge',
+        executable='parameter_bridge',
+        arguments=['/clock@rosgraph_msgs/msg/Clock[ignition.msgs.Clock'],
+        output='screen'
+    )
+
+
     return LaunchDescription([
+
+        bridge,
+        node_robot_state_publisher,
+        gz_sim,
+        gz_create,
+
         DeclareLaunchArgument(
         'use_sim_time',
         default_value='false',
         description='Use sim time if true'),
-        DeclareLaunchArgument(
-        'use_ros2_control',
-        default_value='true',
-        description='Use ros2_control if true'),
+        
+        RegisterEventHandler(
+            event_handler=OnProcessExit(
+                target_action=gz_create,
+                on_exit=[load_joint_state_controller],
+            )
+        ),
 
-        node_robot_state_publisher,
-        gz_sim,
-        gz_create
+        RegisterEventHandler(
+            event_handler=OnProcessExit(
+                target_action=load_joint_state_controller,
+                on_exit=[load_diff_drive_controller],
+            )
+        )
     ])

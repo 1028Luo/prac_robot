@@ -2,10 +2,6 @@
 <robot xmlns:xacro="http://www.ros.org/wiki/xacro"  name="robot">
 
 
-
-
-
-
     <!-- This will include all the contents of example_include.xacro first. Go check it out! -->
     <xacro:include filename="prac_include.xacro" />
     <xacro:include filename="ros2_control.xacro" />
@@ -77,7 +73,7 @@
                 <box size="${chassis_length} ${chassis_width} ${chassis_height}" />
             </geometry>
         </collision>
-        <xacro:inertial_box mass="10" x="${chassis_length}" y="${chassis_length}" z="${chassis_length}">
+        <xacro:inertial_box mass="3" x="${chassis_length}" y="${chassis_length}" z="${chassis_length}">
             <origin xyz="0 0 0" rpy="0 0 0"/>
         </xacro:inertial_box>
     </link>
