@@ -1,0 +1,4 @@
+- ros_topic_name: "rosLidar"
+  gz_topic_name: "ignLidar"
+  ros_type_name: "sensor_msgs/msg/LaserScan"
+  gz_type_name: "ignition.msgs.LaserScan"

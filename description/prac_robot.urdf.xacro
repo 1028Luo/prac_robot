@@ -5,7 +5,7 @@
     <!-- This will include all the contents of example_include.xacro first. Go check it out! -->
     <xacro:include filename="prac_include.xacro" />
     <xacro:include filename="ros2_control.xacro" />
-
+    <xacro:include filename="lidar.xacro" />
 
     <!-- my own stuff -->
 
@@ -43,12 +43,21 @@
     <link name="dummy"></link>
 
 
+    <joint name="dummy_footprint_joint" type="fixed">
+        <parent link="dummy"/>
+        <child link="footprint"/>   
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+    </joint>
+
+
+    <link name= "footprint"></link>
+
     <!-- A simple fixed joint from our empty a link, to our base. -->
     <!-- The base origin is offset from the a origin. -->
     <joint name="dummy_joint" type="fixed">
         <parent link="dummy"/>
-        <child link="chassis"/>     
-        
+        <child link="chassis"/>    
+        <origin xyz="${-wheel_offset_x} 0 ${-wheel_offset_z}"/> 
     </joint>
 
 

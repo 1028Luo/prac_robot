@@ -87,24 +87,50 @@ def generate_launch_description():
     )
 
     # need this bridge, otherwise control 2 teleop won't work
-    bridge = Node(
+    clock_bridge = Node(
         package='ros_gz_bridge',
         executable='parameter_bridge',
         arguments=['/clock@rosgraph_msgs/msg/Clock[ignition.msgs.Clock'],
         output='screen'
     )
 
+    # lidar bridge
+    lidar_bridge = Node(
+        package='ros_gz_bridge',
+        executable='parameter_bridge',
+        arguments=['/ignLidar@sensor_msgs/msg/LaserScan[ignition.msgs.LaserScan'],
+        output='screen'
+
+    )
+
+
+
+
+    # ros2 run teleop_twist_keyboard teleop_twist_keyboard --ros-args -r /cmd_vel:=/diff_drive_base_controller/cmd_vel_unstamped
+
+    keyboardControl = Node(
+        package='teleop_twist_keyboard',
+        executable= 'teleop_twist_keyboard',
+        arguments=['cmd_vel:=/diff_drive_base_controller/cmd_vel_unstamped'],
+        output='screen',
+        prefix="xterm -e" # open another terminal, otherwise this node won't run
+                          # requires dependency: xterm
+
+    )
+
 
     return LaunchDescription([
-
-        bridge,
-        node_robot_state_publisher,
         gz_sim,
         gz_create,
+        clock_bridge,
+        lidar_bridge,
+        node_robot_state_publisher,
+
+        keyboardControl,
 
         DeclareLaunchArgument(
         'use_sim_time',
-        default_value='false',
+        default_value='true',
         description='Use sim time if true'),
         
         RegisterEventHandler(
