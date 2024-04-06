@@ -41,7 +41,7 @@
             <topic>ignLidar</topic>
             <visualize>true</visualize>
             <update_rate>10</update_rate>
-            <gz_frame_id>laser_frame</gz_frame_id>
+            <gz_frame_id>laser_frame</gz_frame_id>  <!-- very important, use ros frame -->
             <ray>
                 <scan>
                     <horizontal>

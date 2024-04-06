@@ -103,17 +103,6 @@ def generate_launch_description():
 
     )
 
-    # lidar bridge
-    tf_bridge = Node(
-        package='ros_gz_bridge',
-        executable='parameter_bridge',
-        arguments=['/ignLidar@sensor_msgs/msg/LaserScan[ignition.msgs.LaserScan'],
-        output='screen'
-
-    )
-
-
-
 
     # ros2 run teleop_twist_keyboard teleop_twist_keyboard --ros-args -r /cmd_vel:=/diff_drive_base_controller/cmd_vel_unstamped
 
@@ -129,9 +118,14 @@ def generate_launch_description():
 
 
 
-    ros_gz_bridge = IncludeLaunchDescription(
+    slam_toolbox = IncludeLaunchDescription(
                 PythonLaunchDescriptionSource([os.path.join(
-                    pkg_path,'launch','launch_bridge.launch.py'
+                    pkg_path,'launch','slam_online_async_launch.py'
+                )])
+    )
+    rviz = IncludeLaunchDescription(
+                PythonLaunchDescriptionSource([os.path.join(
+                    pkg_path,'launch','rviz_launch.py'
                 )])
     )
 
@@ -142,11 +136,10 @@ def generate_launch_description():
         gz_create,
         clock_bridge,
         lidar_bridge,
-        #ros_gz_bridge,
+        slam_toolbox,
         node_robot_state_publisher,
-
         keyboardControl,
-
+        
         DeclareLaunchArgument(
         'use_sim_time',
         default_value='true',
@@ -164,5 +157,6 @@ def generate_launch_description():
                 target_action=load_joint_state_controller,
                 on_exit=[load_diff_drive_controller],
             )
-        )
+        ),
+        rviz
     ])
