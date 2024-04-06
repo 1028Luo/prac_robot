@@ -103,6 +103,15 @@ def generate_launch_description():
 
     )
 
+    # lidar bridge
+    tf_bridge = Node(
+        package='ros_gz_bridge',
+        executable='parameter_bridge',
+        arguments=['/ignLidar@sensor_msgs/msg/LaserScan[ignition.msgs.LaserScan'],
+        output='screen'
+
+    )
+
 
 
 
@@ -119,11 +128,21 @@ def generate_launch_description():
     )
 
 
+
+    ros_gz_bridge = IncludeLaunchDescription(
+                PythonLaunchDescriptionSource([os.path.join(
+                    pkg_path,'launch','launch_bridge.launch.py'
+                )])
+    )
+
+
+
     return LaunchDescription([
         gz_sim,
         gz_create,
         clock_bridge,
         lidar_bridge,
+        #ros_gz_bridge,
         node_robot_state_publisher,
 
         keyboardControl,
