@@ -46,7 +46,7 @@ def generate_launch_description():
     # define robot spawn position
     x_pose = LaunchConfiguration('x_pose', default='0.0')
     y_pose = LaunchConfiguration('y_pose', default='0.0')
-    z_pose = LaunchConfiguration('z_pose', default='0.5')
+    z_pose = LaunchConfiguration('z_pose', default='2.0')
 
 
     # launch gazebo with environment
