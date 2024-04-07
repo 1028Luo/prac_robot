@@ -7,26 +7,35 @@ endif()
 
 # find dependencies
 find_package(ament_cmake REQUIRED)
-# uncomment the following section in order to fill in
-# further dependencies manually.
-# find_package(<dependency> REQUIRED)
+find_package(rclcpp REQUIRED) # for mapProcesser
+find_package(nav_msgs REQUIRED) # for mapProcesser
+
+
 
 if(BUILD_TESTING)
   find_package(ament_lint_auto REQUIRED)
-  # the following line skips the linter which checks for copyrights
-  # comment the line when a copyright and license is added to all source files
+
   set(ament_cmake_copyright_FOUND TRUE)
-  # the following line skips cpplint (only works in a git repo)
-  # comment the line when this package is in a git repo and when
-  # a copyright and license is added to all source files
+
   set(ament_cmake_cpplint_FOUND TRUE)
   ament_lint_auto_find_test_dependencies()
 endif()
 
 
+# Add executable
+add_executable(map_processor src/mapProcessor.cpp)
+ament_target_dependencies(map_processor rclcpp nav_msgs)
+
+
+install(TARGETS
+  mapProcessor
+  DESTINATION lib/${PROJECT_NAME}
+)
+
+
 install(DIRECTORY
   launch description config maps
-  DESTINATION share/prac_robot/
+  DESTINATION share/${PROJECT_NAME}
 )
 
 
