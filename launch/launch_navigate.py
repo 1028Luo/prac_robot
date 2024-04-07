@@ -117,18 +117,18 @@ def generate_launch_description():
     )
 
 
-
-    slam_toolbox = IncludeLaunchDescription(
-                PythonLaunchDescriptionSource([os.path.join(
-                    pkg_path,'launch','slam_online_async_launch.py'
-                )])
-    )
     rviz = IncludeLaunchDescription(
                 PythonLaunchDescriptionSource([os.path.join(
                     pkg_path,'launch','rviz_launch.py'
-                )])
+                )]),
+                launch_arguments={'-d': os.path.join(pkg_path, 'config', 'navigate_config.rviz')}.items(),
     )
 
+    AMCL = IncludeLaunchDescription(
+                PythonLaunchDescriptionSource([os.path.join(
+                    pkg_path,'launch','localisation_AMCL_launch.py'
+                )])
+    )
 
 
     return LaunchDescription([
@@ -136,7 +136,6 @@ def generate_launch_description():
         gz_create,
         clock_bridge,
         lidar_bridge,
-        slam_toolbox,
         node_robot_state_publisher,
         keyboardControl,
         
@@ -158,5 +157,6 @@ def generate_launch_description():
                 on_exit=[load_diff_drive_controller],
             )
         ),
-        rviz
+        rviz,
+        AMCL
     ])

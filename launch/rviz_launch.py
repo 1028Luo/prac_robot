@@ -7,6 +7,6 @@ def generate_launch_description():
     my_package_dir = get_package_share_directory('prac_robot')
     return launch.LaunchDescription([
         Node(package='rviz2',
-             executable='rviz2',
-             arguments=['-d', os.path.join(my_package_dir, 'config', 'prac_robot.rviz')])
+             executable='rviz2'
+            )
     ])

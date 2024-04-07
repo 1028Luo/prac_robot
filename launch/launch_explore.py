@@ -120,15 +120,15 @@ def generate_launch_description():
 
     slam_toolbox = IncludeLaunchDescription(
                 PythonLaunchDescriptionSource([os.path.join(
-                    pkg_path,'launch','slam_online_async_launch.py'
+                    pkg_path,'launch','slam_online_async_map.py'
                 )])
     )
     rviz = IncludeLaunchDescription(
                 PythonLaunchDescriptionSource([os.path.join(
                     pkg_path,'launch','rviz_launch.py'
-                )])
+                )]),
+                launch_arguments={'-d': os.path.join(pkg_path, 'config', 'explore_config.rviz')}.items(),
     )
-
 
 
     return LaunchDescription([
