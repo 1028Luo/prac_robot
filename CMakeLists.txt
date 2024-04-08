@@ -7,9 +7,9 @@ endif()
 
 # find dependencies
 find_package(ament_cmake REQUIRED)
-find_package(rclcpp REQUIRED) # for mapProcesser
-find_package(nav_msgs REQUIRED) # for mapProcesser
-
+find_package(rclcpp REQUIRED) # for myPlanner
+find_package(nav_msgs REQUIRED) # for myPlanner
+find_package(geometry_msgs REQUIRED) # for myPlanner
 
 
 if(BUILD_TESTING)
@@ -22,13 +22,13 @@ if(BUILD_TESTING)
 endif()
 
 
-# Add executable
-add_executable(map_processor src/mapProcessor.cpp)
-ament_target_dependencies(map_processor rclcpp nav_msgs)
+# Add executable #line 26, 27, 31 # for myPlanner need to match
+add_executable(myPlanner src/myPlanner.cpp)
+ament_target_dependencies(myPlanner rclcpp nav_msgs geometry_msgs)
 
 
 install(TARGETS
-  mapProcessor
+  myPlanner
   DESTINATION lib/${PROJECT_NAME}
 )
 
