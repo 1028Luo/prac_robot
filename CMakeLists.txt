@@ -23,7 +23,9 @@ endif()
 
 
 # Add executable #line 26, 27, 31 # for myPlanner need to match
-add_executable(myPlanner src/myPlanner.cpp)
+add_executable(myPlanner 
+  src/myPlanner.cpp
+  src/simple_Astar.cpp)
 ament_target_dependencies(myPlanner rclcpp nav_msgs geometry_msgs)
 
 

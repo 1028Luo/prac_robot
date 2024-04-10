@@ -15,7 +15,7 @@
 #include "nav_msgs/msg/occupancy_grid.hpp" // map
 #include "geometry_msgs/msg/pose_stamped.hpp" // goal_pose
 #include "geometry_msgs/msg/pose_with_covariance_stamped.hpp" //AMCL
-
+#include "simple_Astar.hpp"
 
 
 class myPlanner : public rclcpp::Node {
@@ -41,6 +41,7 @@ private:
     void mapCallback(const nav_msgs::msg::OccupancyGrid::SharedPtr map_msg) {
 
         std::cout << "received map" << std::endl;
+        sayHello();
         if (map_msg) {
             
             // access the info field
@@ -110,6 +111,8 @@ private:
 
 int main(int argc, char** argv) {
     std::cout << "running myPlanner" << std::endl;
+    
+    std::cout << std::endl;
     rclcpp::init(argc, argv);
     auto node = std::make_shared<myPlanner>();
     rclcpp::spin(node);

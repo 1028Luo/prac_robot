@@ -1,0 +1,45 @@
+#pragma once
+#include <iostream>
+#include <vector>
+#include <list>
+#include <math.h>
+
+void sayHello();
+
+
+const int normal_cost = 2;
+const int diagonal_cost = 3;
+
+struct point{
+    int x,y;
+    int F,G,H;
+    point *parent;
+
+    // constructor
+    point(int _x, int _y) :x(_x), y(_y), F(0), G(0), H(0), parent(NULL){}
+};
+
+class Astar{
+
+
+public:
+    void initAstar(std::vector<std::vector<int>> & _grid); // constructor
+    bool findPath(point &start, point &dest); // return true if path is found
+    
+    // return true if the next point is in the map and not an obstacle
+    bool isValid(const point* curr, const point* next) const; 
+    
+    std::vector<point *> getSuccessor(point *any); // get all surrounding points
+    bool isInList(const std::list<point *> list, const point *any) const;
+
+    int getG(point *start, point *any); // g: cost from start to point
+    int getH(point *any, point *dest); // h: point to destination
+    int getF(point *any);
+
+    point *getLowestF();
+private:
+    std::vector<std::vector<int>> grid;
+
+    std::list<point *> openList;
+    std::list<point *> closedList;
+};
