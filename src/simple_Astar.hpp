@@ -23,14 +23,17 @@ class Astar{
 
 
 public:
-    void initAstar(std::vector<std::vector<int>> & _grid); // constructor
-    bool findPath(point &start, point &dest); // return true if path is found
-    
+    // use default constructor
+
+    void initAstar(std::vector<std::vector<int>> & _grid); // init
+    point *findPath(point &start, point &dest); // return true if path is found
+    std::list<point *> getPath(point &start, point &dest);
+
     // return true if the next point is in the map and not an obstacle
     bool isValid(const point* curr, const point* next) const; 
     
     std::vector<point *> getSuccessor(point *any); // get all surrounding points
-    bool isInList(const std::list<point *> list, const point *any) const;
+    point *isInList(const std::list<point *> &list, const point *any) const;
 
     int getG(point *start, point *any); // g: cost from start to point
     int getH(point *any, point *dest); // h: point to destination

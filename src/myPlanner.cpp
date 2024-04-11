@@ -41,7 +41,7 @@ private:
     void mapCallback(const nav_msgs::msg::OccupancyGrid::SharedPtr map_msg) {
 
         std::cout << "received map" << std::endl;
-        sayHello();
+
         if (map_msg) {
             
             // access the info field

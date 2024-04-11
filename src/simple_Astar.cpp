@@ -1,10 +1,5 @@
 #include "simple_Astar.hpp"
 
-void sayHello(){
-    std::cout << "hihi" <<std::endl;
-
-
-}
 
 void Astar::initAstar(std::vector<std::vector<int>> & _grid){
     grid = _grid;
@@ -34,7 +29,7 @@ int Astar::getH(point *any, point *dest){
 
 int Astar::getF(point *any){
 
-    return any->G + any->F;
+    return any->G + any->H;
 }
 
 // classic algo: find smallest value in a list
@@ -87,19 +82,36 @@ std::vector<point *> Astar::getSuccessor(point *any){
     return successorsVec;
 }
 
-bool Astar::isInList(const std::list<point *> list, const point *any) const{
+point *Astar::isInList(const std::list<point *> &list, const point *any) const{
 
     for (auto temp : list){
         if (temp->x == any->x && temp->y == any->y) {
-            return true;
+            return temp;
         }
     }
 
-    return false;
+    return NULL;
+}
+
+std::list<point *> Astar::getPath(point &start, point &dest){
+
+    point *tail = findPath(start, dest);
+    std::list<point *> path;
+    while (tail) {
+        path.push_front(tail);
+        tail = tail->parent;
+
+    }
+
+    openList.clear();
+    closedList.clear();
+    
+    return path;
+
 }
 
 
-bool Astar::findPath(point &start, point &dest){
+point *Astar::findPath(point &start, point &dest){
 
     openList.push_back(new point(start.x, start.y));
 
@@ -137,8 +149,10 @@ bool Astar::findPath(point &start, point &dest){
 
             }
 
-            if (isInList(openList,&dest)){
-                return true;
+            point *resPoint = isInList(openList,&dest);
+            if (resPoint){
+                std::cout << "found path!" << std::endl;
+                return resPoint;
             }
 
             
@@ -146,5 +160,5 @@ bool Astar::findPath(point &start, point &dest){
 
         
     }
-    return false;
+    return NULL;
 }
