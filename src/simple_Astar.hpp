@@ -4,8 +4,6 @@
 #include <list>
 #include <math.h>
 
-void sayHello();
-
 
 const int normal_cost = 2;
 const int diagonal_cost = 3;
@@ -16,6 +14,7 @@ struct point{
     point *parent;
 
     // constructor
+    point():x(0), y(0), F(0), G(0), H(0), parent(NULL){}
     point(int _x, int _y) :x(_x), y(_y), F(0), G(0), H(0), parent(NULL){}
 };
 
