@@ -29,8 +29,16 @@ add_executable(myPlanner
 ament_target_dependencies(myPlanner rclcpp nav_msgs geometry_msgs)
 
 
+add_executable(myController
+  src/myController.cpp
+  src/simple_LQR.cpp)
+ament_target_dependencies(myController rclcpp nav_msgs geometry_msgs)
+
+
+
 install(TARGETS
   myPlanner
+  myController
   DESTINATION lib/${PROJECT_NAME}
 )
 

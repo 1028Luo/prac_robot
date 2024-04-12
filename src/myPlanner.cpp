@@ -14,7 +14,6 @@
 #include "rclcpp/rclcpp.hpp"
 #include "nav_msgs/msg/occupancy_grid.hpp" // map
 #include "nav_msgs/msg/path.hpp" // map
-
 #include "geometry_msgs/msg/pose_stamped.hpp" // goal_pose
 #include "geometry_msgs/msg/pose_with_covariance_stamped.hpp" //AMCL
 #include "simple_Astar.hpp"
@@ -172,7 +171,7 @@ private:
 };
 
 int main(int argc, char** argv) {
-    std::cout << "running myPlanner" << std::endl;
+    std::cout << "myPlanner is running" << std::endl;
     
     std::cout << std::endl;
     rclcpp::init(argc, argv);
