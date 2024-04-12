@@ -18,7 +18,7 @@
 #include "geometry_msgs/msg/pose_stamped.hpp" // goal_pose
 #include "geometry_msgs/msg/pose_with_covariance_stamped.hpp" //AMCL
 #include "simple_Astar.hpp"
-
+#include "plan_helper.hpp"
 
 class myPlanner : public rclcpp::Node {
 public:
@@ -67,11 +67,11 @@ private:
             std::cout << std::endl;
             map = map_temp;
 
+            myAstar.initAstar(map);
             flag_map = true; // map ready
 
-
             // print map
-            printMap(map);
+            //printMap(map);
 
         } else {
             RCLCPP_WARN(this->get_logger(), "Received null map message");
@@ -88,6 +88,9 @@ private:
             std::cout << "Y: " << goal_pose_msg->pose.position.y << std::endl;
             std::cout << "rot Z: " << goal_pose_msg->pose.orientation.z << std::endl;
             std::cout << std::endl;
+
+            dest = pose2map(goal_pose_msg->pose.position.x, goal_pose_msg->pose.position.y);
+
 
             flag_dest = true;
             publishPath();
@@ -107,33 +110,40 @@ private:
             std::cout << "rot Z: " << AMCL_pose_msg->pose.pose.orientation.z << std::endl;
             std::cout << std::endl;
 
-            start.x = AMCL_pose_msg->pose.pose.position.x;
-            start.y = AMCL_pose_msg->pose.pose.position.y;
-            
+            start = pose2map(AMCL_pose_msg->pose.pose.position.x, AMCL_pose_msg->pose.pose.position.y);
+
             flag_start = true; // start ready
             publishPath();
         } else {
-            RCLCPP_WARN(this->get_logger(), "Received null goal message");
+            RCLCPP_WARN(this->get_logger(), "Received null pose message");
         }
     }
 
     void publishPath(){
         // Check if all messages are received
-        if (true){
-        //if (flag_dest && flag_start && flag_dest){
-            // Combine data from all messages as needed
+        //if (true){
+        if (flag_dest && flag_start && flag_dest){
 
-            // fill information in path
-            geometry_msgs::msg::PoseStamped pose;
-            pose.pose.position.x = 1;
-            pose.pose.position.y = 1;
-            nav_msgs::msg::Path path_msg;
-            path_msg.poses.push_back(pose);
+            std::cout << "A* planning path with start: x: " << start.x << "  y:" << start.y << std::endl;
+            std::cout << "dest is x: " << dest.x << "  y:" << dest.y << std::endl;
 
-            //auto combinedData = combineMessages(msg1_, msg2_, msg3_);
-            // Publish combined data
+            // get path from Astar
+            std::list<point *> path_points = myAstar.getPath(start, dest);
+
+            // show path and insert path to path_msg
+            for (auto &p : path_points) {
+                std::cout<< "(" << p->x << "," << p->y << ")"; // print
+
+                geometry_msgs::msg::PoseStamped pose;
+                pose.pose.position.x = p->x;
+                pose.pose.position.y = p->y;
+                path_msg.poses.push_back(pose);
+            }
+            std::cout << std::endl;
+
+            // publish path
             path_publisher_->publish(path_msg);
-
+            std::cout << "myPlanner: path published!" << std::endl;
             // Reset stored messages
             flag_dest = false;
             flag_start = false;
@@ -153,17 +163,10 @@ private:
     point start;
     point dest;
     bool flag_map, flag_start, flag_dest = false; // data not ready
+    Astar myAstar;
+    nav_msgs::msg::Path path_msg;
 
 
-
-void printMap(const std::vector<std::vector<int>>& map_temp) {
-    for (const auto& row : map_temp) {
-        for (int value : row) {
-            std::cout << value << " ";
-        }
-        std::cout << std::endl;
-    }
-}
 
 
 };

@@ -3,7 +3,7 @@
 
 void Astar::initAstar(std::vector<std::vector<int>> & _grid){
     grid = _grid;
-
+    std::cout << "Astar initialized" << std::endl;
 }
 
 // g: cost from start to point
@@ -151,7 +151,7 @@ point *Astar::findPath(point &start, point &dest){
 
             point *resPoint = isInList(openList,&dest);
             if (resPoint){
-                std::cout << "found path!" << std::endl;
+                std::cout << "Astar: found path!" << std::endl;
                 return resPoint;
             }
 
@@ -160,5 +160,6 @@ point *Astar::findPath(point &start, point &dest){
 
         
     }
+    std::cout << "Astar: planning failed!" << std::endl;
     return NULL;
 }
