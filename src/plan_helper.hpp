@@ -5,6 +5,7 @@
 #include <math.h>
 #include "simple_Astar.hpp"
 
+
 // given a 2d map and a pose(start or dest), 
 // return the corresponding map point on map
 point pose2map(double poseX, double poseY){
@@ -22,10 +23,26 @@ point pose2map(double poseX, double poseY){
 }
 
 // reverse
-int map2pose(){
+double map2poseX(int map_idx_X){
 
+    double resolution = 0.05;
+    double scailing = 1/resolution; 
+    int x_offset = 284;
 
-    return 0;
+    double poseX = (map_idx_X - x_offset) / scailing;
+    
+    return poseX;
+}
+
+double map2poseY(int map_idx_Y){
+
+    double resolution = 0.05;
+    double scailing = 1/resolution; 
+    int y_offset = 210;
+
+    double poseY = (map_idx_Y - y_offset) / scailing;
+    
+    return poseY;
 }
 
 

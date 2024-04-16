@@ -2,46 +2,76 @@
 
 void LQR::initLQR(){
 
-
-    u_ref << 1, 1;
-
-
     // linearization on v = 0, yaw = 0
 
-    A << 0, 0, 0,
-         0, 0, 0,
-         0, 0, 0;
-
-    B << 1, 0,
-         0, 1,
-         0, 0;
-
-    Q << 1, 0, 0,
+    A << 1, 0, 0,
          0, 1, 0,
          0, 0, 1;
 
-    R << 1, 0,
-         0, 1;
+    Q << 0.1, 0, 0,
+         0, 0.1, 0,
+         0, 0, 0.1;
 
-    // solve the Riccati equation and get K
-    Eigen::Matrix<double, 5, 5> S;
-    S = A.transpose() * Q * A + R;
-    K = (R.inverse() * B.transpose() * S).transpose();
+    R << 0.1, 0,
+         0, 0.1;
+
+
+
+	std::cout << "LQR:: LQR created" << std::endl;
 
 }
 
-ControlInput LQR::generateControlInput(State currState, State desiredState){
 
+Eigen::Matrix<double, 3, 2> getB(double yaw, double dt){
+    Eigen::Matrix<double, 3, 2> B; // Input model
+    B << std::cos(yaw)*dt, 0,
+        std::sin(yaw)*dt, 0,
+        0, dt;
 
-    Eigen::Vector3d u;
+    return B;
+}
+
+ControlInput LQR::generateControlInput(State currState, State desiredState, double dt){
+
     Eigen::Vector3d x;
     Eigen::Vector3d x_ref; // Reference state [x_ref, y_ref, theta_ref]
-    
-    x << currState.x, currState.y, currState.yaw;
+	x << currState.x, currState.y, currState.yaw;
     x_ref << desiredState.x, desiredState.y, desiredState.yaw;
+	
+    uint8_t N = 50; // number of iteration
+    std::vector<Eigen::MatrixXd> P(N+1);
+    Eigen::MatrixXd Qf = Q;
+    P[N] = Qf;
+    B = getB(currState.yaw, dt);
 
-    u = -K * (x - x_ref) + u_ref;
+    for (uint8_t i = N; i >= 1; --i) {
+    auto Y = R + B.transpose() * P[i] * B;
+    // Compute the SVD decomposition of Y
+    Eigen::JacobiSVD<Eigen::MatrixXd> svd(Y, Eigen::ComputeThinU | Eigen::ComputeThinV);
+    // Compute the pseudo-inverse of Y
+    Eigen::MatrixXd Yinv = svd.matrixV() * svd.singularValues().asDiagonal().inverse() * svd.matrixU().transpose();
+
+    P[i-1] = Q + A.transpose() * P[i] * A - (A.transpose() * P[i] * B) * Yinv * (B.transpose() * P[i] * A);
+    }
+
+    std::vector<Eigen::MatrixXd> K(N);
+    std::vector<Eigen::Vector2d> u(N);
     
-    ControlInput input(u[0], u[1]);
-    return input;
+    for (uint8_t i = 0; i <= N-1; ++i){
+    auto Y = R + B.transpose() * P[i+1] * B;
+    // Compute the SVD decomposition of Y
+    Eigen::JacobiSVD<Eigen::MatrixXd> svd(Y, Eigen::ComputeThinU | Eigen::ComputeThinV);
+    // Compute the pseudo-inverse of Y
+    Eigen::MatrixXd Yinv = svd.matrixV() * svd.singularValues().asDiagonal().inverse() * svd.matrixU().transpose();
+
+    K[i] = Yinv * B.transpose() * P[i+1] * A;
+    u[i] = -K[i] * (x - x_ref);
+    }
+
+    ControlInput u_optimal = {u[N-1](0), u[N-1](1)};
+
+    //std::cout << "LQR:: curr state x is: " << currState.x << std::endl;
+    //std::cout << "LQR:: desired state x is: " << desiredState.x << std::endl;
+
+    return u_optimal;
 }

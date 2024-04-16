@@ -145,7 +145,7 @@ private:
             std::cout << "myPlanner: path published!" << std::endl;
             // Reset stored messages
             flag_dest = false;
-            flag_start = false;
+            flag_start = true;
         }
     }
 

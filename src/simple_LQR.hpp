@@ -1,5 +1,5 @@
 #include <iostream>
-#include <eigen3/Eigen/Dense>
+#include <Eigen/Eigen>
 
 struct State {
 
@@ -31,7 +31,7 @@ public:
 
     void initLQR(); // init
 
-    ControlInput generateControlInput(State currState, State desiredState);
+    ControlInput generateControlInput(State currState, State desiredState, double dt);
 
 
 private:
@@ -42,8 +42,10 @@ private:
     Eigen::Matrix3d Q;
     Eigen::Matrix2d R;
 
-    Eigen::Matrix<double, 2, 3> K;
+    std::vector<Eigen::MatrixXd> K;
 
     Eigen::Vector2d u_ref; 
 
+    uint8_t N = 50; // number of iteration
+    std::vector<Eigen::MatrixXd> P;
 };
