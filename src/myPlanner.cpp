@@ -131,15 +131,17 @@ private:
 
             // show path and insert path to path_msg
             for (auto &p : path_points) {
-                std::cout<< "(" << p->x << "," << p->y << ")"; // print
+                std::cout<< "(" << map2poseX(p->x) << "," << map2poseY(p->y) << ")"; // print
 
                 geometry_msgs::msg::PoseStamped pose;
-                pose.pose.position.x = p->x;
-                pose.pose.position.y = p->y;
+                pose.pose.position.x = map2poseX(p->x);
+                pose.pose.position.y = map2poseY(p->y);
+                //pose.pose.orientation = goal_pose_rot_z;
                 path_msg.poses.push_back(pose);
+                path_msg.header.frame_id = 'map';
             }
             std::cout << std::endl;
-
+            
             // publish path
             path_publisher_->publish(path_msg);
             std::cout << "myPlanner: path published!" << std::endl;
@@ -164,7 +166,7 @@ private:
     bool flag_map, flag_start, flag_dest = false; // data not ready
     Astar myAstar;
     nav_msgs::msg::Path path_msg;
-
+    double goal_pose_rot_z;
 
 
 

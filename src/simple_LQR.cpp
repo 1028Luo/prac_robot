@@ -8,12 +8,15 @@ void LQR::initLQR(){
          0, 1, 0,
          0, 0, 1;
 
-    Q << 0.1, 0, 0,
-         0, 0.1, 0,
-         0, 0, 0.1;
+    // increase Q and decrease R for higher control effort
 
-    R << 0.1, 0,
-         0, 0.1;
+    Q << 1, 0, 0,
+        0, 1, 0,
+        0, 0, 1;
+        
+    R << 0.01, 0,
+        0, 0.01;
+
 
 
 
@@ -70,8 +73,11 @@ ControlInput LQR::generateControlInput(State currState, State desiredState, doub
 
     ControlInput u_optimal = {u[N-1](0), u[N-1](1)};
 
-    //std::cout << "LQR:: curr state x is: " << currState.x << std::endl;
-    //std::cout << "LQR:: desired state x is: " << desiredState.x << std::endl;
+    std::cout << "LQR:: curr state x is: " << currState.x << std::endl;
+    std::cout << "LQR:: desired state x is: " << desiredState.x << std::endl;
+    std::cout << "LQR:: curr state y is: " << currState.y << std::endl;
+    std::cout << "LQR:: desired state y is: " << desiredState.y << std::endl;
+
 
     return u_optimal;
 }

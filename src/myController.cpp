@@ -16,8 +16,12 @@
 #include "geometry_msgs/msg/pose_stamped.hpp"
 #include "geometry_msgs/msg/twist.hpp"
 #include "geometry_msgs/msg/pose_with_covariance_stamped.hpp" //AMCL
+#include "nav_msgs/msg/odometry.hpp" //odom
 #include "plan_helper.hpp"
 #include "simple_LQR.hpp"
+//#include "tf2/LinearMath/Quaternion.h"
+//#include "tf2/LinearMath/Matrix3x3.h"
+
 
 class myController : public rclcpp::Node {
 public:
@@ -62,11 +66,11 @@ private:
             std::cout << "Y: " << AMCL_pose_msg->pose.pose.position.y << std::endl;
             std::cout << "rot Z: " << AMCL_pose_msg->pose.pose.orientation.z << std::endl;
             std::cout << std::endl;
-            point temp = pose2map(AMCL_pose_msg->pose.pose.position.x, AMCL_pose_msg->pose.pose.position.y);
+            //point temp = pose2map(AMCL_pose_msg->pose.pose.position.x, AMCL_pose_msg->pose.pose.position.y);
 
-            currState_map.x = temp.x;
-            currState_map.y = temp.y;
-            currState_map.yaw = AMCL_pose_msg->pose.pose.orientation.z;
+            currState_AMCL.x = AMCL_pose_msg->pose.pose.position.x;
+            currState_AMCL.y = AMCL_pose_msg->pose.pose.position.y;
+            currState_AMCL.yaw = AMCL_pose_msg->pose.pose.orientation.z;
 
             flag_curr_pose = true; // start ready
             
@@ -93,7 +97,7 @@ private:
             desiredState.yaw = 1;
 
             // get control input
-            ControlInput input = myLQR.generateControlInput(currState_map, desiredState, dt_);
+            ControlInput input = myLQR.generateControlInput(currState_AMCL, desiredState, dt_);
             
             // cap the input
             if (input.linear_vel_x > vel_linear_x_cap) {
@@ -120,9 +124,13 @@ private:
             path_publisher_->publish(cmd_msg);
 
             // if this way point has been reached, move to next waypoint
-             std::cout << "curr error:" << compute_error(currState_map, desiredState) << std::endl;
-            if(compute_error(currState_map, desiredState) <= tolerance) {
-                path_idx = path_idx + 2;
+             std::cout << "curr error:" << compute_error(currState_AMCL, desiredState) << std::endl;
+            if(compute_error(currState_AMCL, desiredState) <= tolerance) {
+                
+                path_idx = path_idx + 4;
+                if (path_idx > path_msg_.poses.size()){
+                    path_idx = path_msg_.poses.size()-1;
+                }
             }
         }
     }
@@ -139,22 +147,25 @@ private:
 
     rclcpp::Subscription<nav_msgs::msg::Path>::SharedPtr path_subscription;
     rclcpp::Subscription<geometry_msgs::msg::PoseWithCovarianceStamped>::SharedPtr AMCL_pose_subscription_;
+
     rclcpp::TimerBase::SharedPtr control_trigger_;
     rclcpp::Publisher<geometry_msgs::msg::Twist>::SharedPtr path_publisher_;
 
 
 
     // stores message from the subscribers
-    double dt_ = 0.1;
+    double dt_ = 0.05;
     bool flag_curr_pose = false;
     bool flag_reached_target = false;
     bool flag_path = false;
     nav_msgs::msg::Path path_msg_;
     geometry_msgs::msg::Twist cmd_msg;
     LQR myLQR;
-    State currState_map;
+    State currState_AMCL;
+    State currState_odom;
+
     int path_idx = 0;
-    double tolerance = 20;
+    double tolerance = 1.5;
     double vel_linear_x_cap = 0.5;
     double vel_angualr_z_cap = 0.5;
 };
