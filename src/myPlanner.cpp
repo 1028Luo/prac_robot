@@ -16,8 +16,10 @@
 #include "nav_msgs/msg/path.hpp" // map
 #include "geometry_msgs/msg/pose_stamped.hpp" // goal_pose
 #include "geometry_msgs/msg/pose_with_covariance_stamped.hpp" //AMCL
+#include "geometry_msgs/msg/quaternion.hpp"
 #include "simple_Astar.hpp"
 #include "plan_helper.hpp"
+#include <string>
 
 class myPlanner : public rclcpp::Node {
 public:
@@ -88,8 +90,12 @@ private:
             std::cout << "rot Z: " << goal_pose_msg->pose.orientation.z << std::endl;
             std::cout << std::endl;
 
-            dest = pose2map(goal_pose_msg->pose.position.x, goal_pose_msg->pose.position.y);
+            goal_quat.x = goal_pose_msg->pose.orientation.x;
+            goal_quat.y = goal_pose_msg->pose.orientation.y;
+            goal_quat.w = goal_pose_msg->pose.orientation.w;
+            goal_quat.z = goal_pose_msg->pose.orientation.z;
 
+            dest = pose2map(goal_pose_msg->pose.position.x, goal_pose_msg->pose.position.y);
 
             flag_dest = true;
             publishPath();
@@ -130,15 +136,18 @@ private:
             std::list<point *> path_points = myAstar.getPath(start, dest);
 
             // show path and insert path to path_msg
+            std::string frameID = "map";
             for (auto &p : path_points) {
                 std::cout<< "(" << map2poseX(p->x) << "," << map2poseY(p->y) << ")"; // print
 
                 geometry_msgs::msg::PoseStamped pose;
                 pose.pose.position.x = map2poseX(p->x);
                 pose.pose.position.y = map2poseY(p->y);
-                //pose.pose.orientation = goal_pose_rot_z;
+                pose.pose.orientation = goal_quat;
+
+
                 path_msg.poses.push_back(pose);
-                path_msg.header.frame_id = 'map';
+                path_msg.header.frame_id = "map";
             }
             std::cout << std::endl;
             
@@ -166,8 +175,7 @@ private:
     bool flag_map, flag_start, flag_dest = false; // data not ready
     Astar myAstar;
     nav_msgs::msg::Path path_msg;
-    double goal_pose_rot_z;
-
+    geometry_msgs::msg::Quaternion goal_quat;
 
 
 };

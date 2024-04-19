@@ -12,7 +12,7 @@ void LQR::initLQR(){
 
     Q << 1, 0, 0,
         0, 1, 0,
-        0, 0, 1;
+        0, 0, 0.8;
         
     R << 0.01, 0,
         0, 0.01;
@@ -77,6 +77,9 @@ ControlInput LQR::generateControlInput(State currState, State desiredState, doub
     std::cout << "LQR:: desired state x is: " << desiredState.x << std::endl;
     std::cout << "LQR:: curr state y is: " << currState.y << std::endl;
     std::cout << "LQR:: desired state y is: " << desiredState.y << std::endl;
+    std::cout << "LQR:: curr state yaw is: " << currState.yaw << std::endl;
+    std::cout << "LQR:: desired state yaw is: " << desiredState.yaw << std::endl;
+
 
 
     return u_optimal;

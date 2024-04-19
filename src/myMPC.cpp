@@ -23,6 +23,66 @@
 #include "tf2/LinearMath/Matrix3x3.h"
 
 
+const int predictionHorizon = 10;
+const double timeStep = 0.1;
+// const int dimX = 3;
+// const int dimU = 2;
+// const int uNums = predictionHorizon * dimU; // numbers of predicted control inputs
+const double targetX = 5.0; 
+const double targetY = -2.0;
+const double lowerU = -1.0; // lower and upper constraints for control inputs
+const double upperU = 1.0;
+const double regularizerWeight = 0.3;
+const double lookaheadDist_ = 0.05;
+
+template<typename T>
+T norminalAngle(T value){
+    while(*(double*) &value > M_PI || *(double*) &value < -M_PI){
+        if(*(double*) &value > M_PI) value -= 2.0 * T(M_PI);
+        else value += 2.0 *  T(M_PI);
+    }
+    return value;
+}
+
+struct MPCProblem {
+  double x_init, y_init, yaw_init;
+  double x_goal, y_goal;
+  
+  MPCProblem(double x_init, double y_init, double yaw_init, double x_goal, double y_goal)
+      : x_init(x_init), y_init(y_init), yaw_init(yaw_init), x_goal(x_goal), y_goal(y_goal) {}
+  
+  template<typename T>
+  bool operator()(const T* const v, const T* const w, T* residual) const {
+    // State variables
+    T x = T(x_init);
+    T y = T(y_init);
+    T yaw = T(yaw_init);
+    
+    // Control inputs
+    T dt = T(timeStep); // Time step
+    T v_k = T(v[0]);
+    T w_k = T(w[0]);
+    
+    // MPC iterations
+    for (int i = 0; i < predictionHorizon; ++i) {
+      // Update state using kinematic model
+      x += v_k * cos(yaw) * dt;
+      y += v_k * sin(yaw) * dt;
+      yaw += norminalAngle( w_k * dt);
+
+    // Compute residual (distance to goal)
+    T x_diff = T(x_goal) - x;
+    T y_diff = T(y_goal) - y;
+    residual[0] = regularizerWeight * x_diff;
+    residual[1] = regularizerWeight * y_diff;
+    }
+    
+    return true;
+  }
+};
+
+
+
 
 class myController : public rclcpp::Node {
 public:
@@ -36,10 +96,8 @@ public:
         AMCL_pose_subscription_ = this->create_subscription<geometry_msgs::msg::PoseWithCovarianceStamped>(
             "amcl_pose", 10, std::bind(&myController::AMCL_Callback, this, std::placeholders::_1));
 
-        control_trigger_ = this->create_wall_timer(std::chrono::duration<double>(dt_), std::bind(&myController::controlLoop, this));
-
         // publish to topic: diff_drive_base_controller/cmd_vel_unstamped
-        path_publisher_ = this->create_publisher<geometry_msgs::msg::Twist>("diff_drive_base_controller/cmd_vel_unstamped", 10);
+        control_publisher_ = this->create_publisher<geometry_msgs::msg::Twist>("diff_drive_base_controller/cmd_vel_unstamped", 10);
     }
 
 private:
@@ -77,12 +135,11 @@ private:
             currState_AMCL.x = AMCL_pose_msg->pose.pose.position.x;
             currState_AMCL.y = AMCL_pose_msg->pose.pose.position.y;
 
-            tf2::Quaternion quat(AMCL_pose_msg->pose.pose.orientation.x, AMCL_pose_msg->pose.pose.orientation.y, AMCL_pose_msg->pose.pose.orientation.z, AMCL_pose_msg->pose.pose.orientation.w);
+            tf2::Quaternion quat(AMCL_pose_msg->pose.pose.orientation.x, AMCL_pose_msg->pose.pose.orientation.y, AMCL_pose_msg->pose.pose.orientation.w, AMCL_pose_msg->pose.pose.orientation.z);
             tf2::Matrix3x3 mat(quat);
             double roll, pitch, yaw;
             mat.getRPY(roll, pitch, yaw);
             currState_AMCL.yaw = yaw;
-
             flag_curr_pose = true; // start ready
             
         } else {
@@ -114,24 +171,23 @@ private:
 
             desiredState.yaw = yaw;
 
+
+
+
+
+
+
+
+
+
+
             // get control input
-            ControlInput input = myLQR.generateControlInput(currState_AMCL, desiredState, dt_);
+            //ControlInput input = myLQR.generateControlInput(currState_AMCL, desiredState, dt_);
             
-            // cap the input
-            if (input.linear_vel_x > vel_linear_x_cap) {
-                input.linear_vel_x = vel_linear_x_cap;
-            } else if (input.linear_vel_x < -vel_linear_x_cap) {
-                input.linear_vel_x = -vel_linear_x_cap;
-            }
+
             
-            if (input.angular_vel_z > vel_angualr_z_cap) {
-                input.angular_vel_z = vel_angualr_z_cap;
-            } else if (input.angular_vel_z < -vel_angualr_z_cap) {
-                input.angular_vel_z = -vel_angualr_z_cap;
-            }
-            
-            cmd_msg.linear.x = input.linear_vel_x;
-            cmd_msg.angular.z = input.angular_vel_z;
+            //cmd_msg.linear.x = input.linear_vel_x;
+            //cmd_msg.angular.z = input.angular_vel_z;
 
 
             // publish control command
@@ -139,23 +195,16 @@ private:
             std::cout << "Linear X:" << cmd_msg.linear.x << std::endl;
             std::cout << "Angular Z:" << cmd_msg.angular.z << std::endl;
 
-            path_publisher_->publish(cmd_msg);
+            control_publisher_->publish(cmd_msg);
 
             // if this way point has been reached, move to next waypoint
              std::cout << "curr error:" << compute_error(currState_AMCL, desiredState) << std::endl;
             if(compute_error(currState_AMCL, desiredState) <= tolerance) {
                 
-                if (path_idx == path_msg_.poses.size()-1){
-                    std::cout << "myController: reached goal!" << std::endl;
-                    flag_path = false;
-                }
-
                 path_idx = path_idx + 10;
                 if (path_idx > path_msg_.poses.size()){
                     path_idx = path_msg_.poses.size()-1;
                 }
-
-                
             }
         }
     }
@@ -173,8 +222,7 @@ private:
     rclcpp::Subscription<nav_msgs::msg::Path>::SharedPtr path_subscription;
     rclcpp::Subscription<geometry_msgs::msg::PoseWithCovarianceStamped>::SharedPtr AMCL_pose_subscription_;
 
-    rclcpp::TimerBase::SharedPtr control_trigger_;
-    rclcpp::Publisher<geometry_msgs::msg::Twist>::SharedPtr path_publisher_;
+    rclcpp::Publisher<geometry_msgs::msg::Twist>::SharedPtr control_publisher_;
 
 
 
@@ -191,8 +239,8 @@ private:
 
     int path_idx = 0;
     double tolerance = 1.5;
-    double vel_linear_x_cap = 0.5;
-    double vel_angualr_z_cap = 0.5;
+    double vel_linear_x_cap = 1.0;
+    double vel_angualr_z_cap = 1.0;
 };
 
 int main(int argc, char** argv) {

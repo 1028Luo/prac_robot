@@ -42,8 +42,6 @@ private:
     Eigen::Matrix3d Q;
     Eigen::Matrix2d R;
 
-    std::vector<Eigen::MatrixXd> K;
-
     Eigen::Vector2d u_ref; 
 
     uint8_t N = 50; // number of iteration
