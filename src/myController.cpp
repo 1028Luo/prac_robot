@@ -67,11 +67,7 @@ private:
         std::cout << "received AMCL pose" << std::endl;
         if (AMCL_pose_msg) {
 
-            std::cout << "Current AMCL pose: ";
-            std::cout << "X: " << AMCL_pose_msg->pose.pose.position.x << std::endl;
-            std::cout << "Y: " << AMCL_pose_msg->pose.pose.position.y << std::endl;
-            std::cout << "rot Z: " << AMCL_pose_msg->pose.pose.orientation.z << std::endl;
-            std::cout << std::endl;
+
             //point temp = pose2map(AMCL_pose_msg->pose.pose.position.x, AMCL_pose_msg->pose.pose.position.y);
 
             currState_AMCL.x = AMCL_pose_msg->pose.pose.position.x;
@@ -82,6 +78,13 @@ private:
             double roll, pitch, yaw;
             mat.getRPY(roll, pitch, yaw);
             currState_AMCL.yaw = yaw;
+
+            std::cout << "Current AMCL pose: ";
+            std::cout << "X: " << currState_AMCL.x << std::endl;
+            std::cout << "Y: " << currState_AMCL.y << std::endl;
+            std::cout << "rot Z: " << currState_AMCL.yaw << std::endl;
+            std::cout << std::endl;
+
 
             flag_curr_pose = true; // start ready
             
@@ -106,13 +109,31 @@ private:
             desiredState.x = s.pose.position.x;
             desiredState.y = s.pose.position.y;
 
-            // extract yaw from quaternion 
+            // extract goal yaw from quaternion 
             tf2::Quaternion quat(s.pose.orientation.x, s.pose.orientation.y, s.pose.orientation.z, s.pose.orientation.w);
             tf2::Matrix3x3 mat(quat);
             double roll, pitch, yaw;
             mat.getRPY(roll, pitch, yaw);
 
-            desiredState.yaw = yaw;
+            
+            double num = (desiredState.y - currState_AMCL.y);
+            double den = (desiredState.x - currState_AMCL.x);
+            desiredState.yaw = atan2(num,den);
+
+            //std::cout << "LQR:: curr state yaw is: " << currState_AMCL.yaw << std::endl;
+            //std::cout << "LQR:: desired state yaw is: " << desiredState.yaw << std::endl;
+
+
+
+
+            std::cout << "nav heading is calculated to be: " << atan2(num,den) << std::endl;
+
+
+
+
+
+
+
 
             // get control input
             ControlInput input = myLQR.generateControlInput(currState_AMCL, desiredState, dt_);
@@ -190,7 +211,7 @@ private:
     State currState_odom;
 
     int path_idx = 0;
-    double tolerance = 1.5;
+    double tolerance = 1.0;
     double vel_linear_x_cap = 0.5;
     double vel_angualr_z_cap = 0.5;
 };
