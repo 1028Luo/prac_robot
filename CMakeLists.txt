@@ -14,6 +14,8 @@ find_package(Eigen3 REQUIRED)
 include_directories(${EIGEN3_INCLUDE_DIR})
 find_package(tf2_ros REQUIRED)
 find_package(tf2 REQUIRED)
+find_package(OpenCV REQUIRED)
+
 
 if(BUILD_TESTING)
   find_package(ament_lint_auto REQUIRED)
@@ -29,7 +31,7 @@ endif()
 add_executable(myPlanner 
   src/myPlanner.cpp
   src/simple_Astar.cpp)
-ament_target_dependencies(myPlanner rclcpp nav_msgs geometry_msgs tf2)
+ament_target_dependencies(myPlanner rclcpp nav_msgs geometry_msgs tf2 OpenCV)
 
 
 add_executable(myController

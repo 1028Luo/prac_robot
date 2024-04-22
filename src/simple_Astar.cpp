@@ -55,7 +55,7 @@ bool Astar::isValid(const point* curr, const point* next) const{
 
     if(next->x < 0 || next->x > grid.size() - 1 // out of bound
     || next->y < 0 || next->y > grid[0].size() - 1
-    || grid[next->x][next->y] != 0 // obstacle
+    || checkFootprintCollision(next) // obstacle
     || (next->x == curr->x && next->y == curr->y) // curr is next
     || isInList(closedList, next) // is in closedList
     ) {
@@ -66,6 +66,18 @@ bool Astar::isValid(const point* curr, const point* next) const{
     } else {
         return false;
     }
+}
+
+bool Astar::checkFootprintCollision(const point* next) const{
+
+    for(int tempX = next->x - footprintSize; tempX < next->x + footprintSize; tempX++){
+        for(int tempY = next->y - footprintSize; tempY < next->y + footprintSize; tempY++){
+            if (grid[tempX][tempY] != 0){
+                return true;
+            }
+        }
+    }
+    return false;
 }
 
 std::vector<point *> Astar::getSuccessor(point *any){

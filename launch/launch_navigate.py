@@ -117,11 +117,12 @@ def generate_launch_description():
     )
 
 
-    rviz = IncludeLaunchDescription(
-                PythonLaunchDescriptionSource([os.path.join(
-                    pkg_path,'launch','rviz_launch.py'
-                )]),
-                launch_arguments={'-d': os.path.join(pkg_path, 'config', 'navigate_config.rviz')}.items(),
+    rviz = Node(
+        package='rviz2',
+        namespace='',
+        executable='rviz2',
+        name='rviz2',
+        arguments={'-d': os.path.join(pkg_path, 'config', 'navigate_config_2.rviz')}.items(),
     )
 
     AMCL = IncludeLaunchDescription(

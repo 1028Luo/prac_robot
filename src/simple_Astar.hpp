@@ -30,7 +30,8 @@ public:
 
     // return true if the next point is in the map and not an obstacle
     bool isValid(const point* curr, const point* next) const; 
-    
+    bool checkFootprintCollision(const point* next) const; 
+
     std::vector<point *> getSuccessor(point *any); // get all surrounding points
     point *isInList(const std::list<point *> &list, const point *any) const;
 
@@ -44,4 +45,6 @@ private:
 
     std::list<point *> openList;
     std::list<point *> closedList;
+
+    int footprintSize = 5;
 };

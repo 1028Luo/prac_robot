@@ -20,6 +20,9 @@
 #include "simple_Astar.hpp"
 #include "plan_helper.hpp"
 #include <string>
+#include <opencv2/opencv.hpp>
+
+using namespace cv;
 
 class myPlanner : public rclcpp::Node {
 public:
@@ -151,6 +154,9 @@ private:
             }
             std::cout << std::endl;
             
+            // show path
+            //showPath(map, path_points);
+
             // publish path
             path_publisher_->publish(path_msg);
             std::cout << "myPlanner: path published!" << std::endl;
@@ -159,6 +165,42 @@ private:
             flag_start = true;
         }
     }
+
+
+    // Function to convert a 2D vector to an OpenCV Mat object
+    void showPath(const std::vector<std::vector<int>>& vec, std::list<point *> path_points) {
+        int rows = vec.size();
+        int cols = vec[0].size();
+        Mat image(rows, cols, CV_8UC1); // Create a grayscale image
+
+        // Loop through the vector and set pixel values
+        for (int i = 0; i < rows; ++i) {
+            for (int j = 0; j < cols; ++j) {
+
+                // Assign the value from the vector to the corresponding pixel
+                image.at<uchar>(i, j) = static_cast<uchar>(vec[i][j]);
+            }
+        }
+
+        for (auto p : path_points){
+            image.at<uchar>(p->x, p->y) = 1;
+        }
+
+        // Create a mirrored image
+        Mat mirroredImage;
+        flip(image, mirroredImage, 1); // Flip horizontally (1)
+
+        // Rotate the image clockwise by 90 degrees
+        Mat rotatedImage;
+        rotate(mirroredImage, rotatedImage, ROTATE_90_CLOCKWISE);
+
+        imshow("path", rotatedImage);
+        waitKey(0);
+
+
+    }
+
+
 
 
     rclcpp::Subscription<nav_msgs::msg::OccupancyGrid>::SharedPtr map_subscription_;
