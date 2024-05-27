@@ -1,0 +1,59 @@
+[0.030s] Invoking command in '/home/jiexing/Documents/ros2_ws/src/prac_robot/build/prac_robot': CMAKE_PREFIX_PATH=/opt/ros/humble /usr/bin/cmake /home/jiexing/Documents/ros2_ws/src/prac_robot -DCMAKE_INSTALL_PREFIX=/home/jiexing/Documents/ros2_ws/src/prac_robot/install/prac_robot
+[0.114s] -- The C compiler identification is GNU 11.4.0
+[0.182s] -- The CXX compiler identification is GNU 11.4.0
+[0.189s] -- Detecting C compiler ABI info
+[0.253s] -- Detecting C compiler ABI info - done
+[0.257s] -- Check for working C compiler: /usr/bin/cc - skipped
+[0.257s] -- Detecting C compile features
+[0.258s] -- Detecting C compile features - done
+[0.260s] -- Detecting CXX compiler ABI info
+[0.322s] -- Detecting CXX compiler ABI info - done
+[0.326s] -- Check for working CXX compiler: /usr/bin/c++ - skipped
+[0.326s] -- Detecting CXX compile features
+[0.327s] -- Detecting CXX compile features - done
+[0.333s] -- Found ament_cmake: 1.3.8 (/opt/ros/humble/share/ament_cmake/cmake)
+[0.434s] -- Found Python3: /usr/bin/python3 (found version "3.10.12") found components: Interpreter 
+[0.501s] -- Found ament_lint_auto: 0.12.10 (/opt/ros/humble/share/ament_lint_auto/cmake)
+[0.561s] -- Added test 'cppcheck' to perform static code analysis on C / C++ code
+[0.561s] -- Configured cppcheck include dirs: 
+[0.561s] -- Configured cppcheck exclude dirs and/or files: 
+[0.562s] -- Added test 'flake8' to check Python code syntax and style conventions
+[0.565s] -- Added test 'lint_cmake' to check CMake code style
+[0.566s] -- Added test 'pep257' to check Python code against some of the docstring style conventions in PEP 257
+[0.574s] -- Added test 'uncrustify' to check C / C++ code style
+[0.574s] -- Configured uncrustify additional arguments: 
+[0.576s] -- Added test 'xmllint' to check XML markup files
+[0.577s] -- Configuring done
+[0.579s] -- Generating done
+[0.580s] -- Build files have been written to: /home/jiexing/Documents/ros2_ws/src/prac_robot/build/prac_robot
+[0.585s] Invoked command in '/home/jiexing/Documents/ros2_ws/src/prac_robot/build/prac_robot' returned '0': CMAKE_PREFIX_PATH=/opt/ros/humble /usr/bin/cmake /home/jiexing/Documents/ros2_ws/src/prac_robot -DCMAKE_INSTALL_PREFIX=/home/jiexing/Documents/ros2_ws/src/prac_robot/install/prac_robot
+[0.585s] Invoking command in '/home/jiexing/Documents/ros2_ws/src/prac_robot/build/prac_robot': CMAKE_PREFIX_PATH=/opt/ros/humble /usr/bin/cmake --build /home/jiexing/Documents/ros2_ws/src/prac_robot/build/prac_robot -- -j16 -l16
+[0.614s] Invoked command in '/home/jiexing/Documents/ros2_ws/src/prac_robot/build/prac_robot' returned '0': CMAKE_PREFIX_PATH=/opt/ros/humble /usr/bin/cmake --build /home/jiexing/Documents/ros2_ws/src/prac_robot/build/prac_robot -- -j16 -l16
+[0.648s] Invoking command in '/home/jiexing/Documents/ros2_ws/src/prac_robot/build/prac_robot': CMAKE_PREFIX_PATH=/opt/ros/humble /usr/bin/cmake --install /home/jiexing/Documents/ros2_ws/src/prac_robot/build/prac_robot
+[0.654s] -- Install configuration: ""
+[0.654s] -- Installing: /home/jiexing/Documents/ros2_ws/src/prac_robot/install/prac_robot/share/prac_robot//launch
+[0.654s] -- Installing: /home/jiexing/Documents/ros2_ws/src/prac_robot/install/prac_robot/share/prac_robot//launch/diff_drive_robot.urdf
+[0.654s] -- Installing: /home/jiexing/Documents/ros2_ws/src/prac_robot/install/prac_robot/share/prac_robot//launch/my_world.sdf
+[0.654s] -- Installing: /home/jiexing/Documents/ros2_ws/src/prac_robot/install/prac_robot/share/prac_robot//launch/__pycache__
+[0.654s] -- Installing: /home/jiexing/Documents/ros2_ws/src/prac_robot/install/prac_robot/share/prac_robot//launch/__pycache__/launch_sim.cpython-310.pyc
+[0.654s] -- Installing: /home/jiexing/Documents/ros2_ws/src/prac_robot/install/prac_robot/share/prac_robot//launch/path_planning_launch.py
+[0.654s] -- Installing: /home/jiexing/Documents/ros2_ws/src/prac_robot/install/prac_robot/share/prac_robot//launch/launch_sim.py
+[0.655s] -- Installing: /home/jiexing/Documents/ros2_ws/src/prac_robot/install/prac_robot/share/prac_robot//launch/messy_world.sdf
+[0.655s] -- Installing: /home/jiexing/Documents/ros2_ws/src/prac_robot/install/prac_robot/share/prac_robot//launch/rrbot.urdf
+[0.655s] -- Installing: /home/jiexing/Documents/ros2_ws/src/prac_robot/install/prac_robot/share/prac_robot//launch/robot.sdf
+[0.655s] -- Installing: /home/jiexing/Documents/ros2_ws/src/prac_robot/install/prac_robot/share/ament_index/resource_index/package_run_dependencies/prac_robot
+[0.655s] -- Installing: /home/jiexing/Documents/ros2_ws/src/prac_robot/install/prac_robot/share/ament_index/resource_index/parent_prefix_path/prac_robot
+[0.655s] -- Installing: /home/jiexing/Documents/ros2_ws/src/prac_robot/install/prac_robot/share/prac_robot/environment/ament_prefix_path.sh
+[0.655s] -- Installing: /home/jiexing/Documents/ros2_ws/src/prac_robot/install/prac_robot/share/prac_robot/environment/ament_prefix_path.dsv
+[0.656s] -- Installing: /home/jiexing/Documents/ros2_ws/src/prac_robot/install/prac_robot/share/prac_robot/environment/path.sh
+[0.656s] -- Installing: /home/jiexing/Documents/ros2_ws/src/prac_robot/install/prac_robot/share/prac_robot/environment/path.dsv
+[0.656s] -- Installing: /home/jiexing/Documents/ros2_ws/src/prac_robot/install/prac_robot/share/prac_robot/local_setup.bash
+[0.656s] -- Installing: /home/jiexing/Documents/ros2_ws/src/prac_robot/install/prac_robot/share/prac_robot/local_setup.sh
+[0.656s] -- Installing: /home/jiexing/Documents/ros2_ws/src/prac_robot/install/prac_robot/share/prac_robot/local_setup.zsh
+[0.656s] -- Installing: /home/jiexing/Documents/ros2_ws/src/prac_robot/install/prac_robot/share/prac_robot/local_setup.dsv
+[0.656s] -- Installing: /home/jiexing/Documents/ros2_ws/src/prac_robot/install/prac_robot/share/prac_robot/package.dsv
+[0.656s] -- Installing: /home/jiexing/Documents/ros2_ws/src/prac_robot/install/prac_robot/share/ament_index/resource_index/packages/prac_robot
+[0.656s] -- Installing: /home/jiexing/Documents/ros2_ws/src/prac_robot/install/prac_robot/share/prac_robot/cmake/prac_robotConfig.cmake
+[0.656s] -- Installing: /home/jiexing/Documents/ros2_ws/src/prac_robot/install/prac_robot/share/prac_robot/cmake/prac_robotConfig-version.cmake
+[0.656s] -- Installing: /home/jiexing/Documents/ros2_ws/src/prac_robot/install/prac_robot/share/prac_robot/package.xml
+[0.658s] Invoked command in '/home/jiexing/Documents/ros2_ws/src/prac_robot/build/prac_robot' returned '0': CMAKE_PREFIX_PATH=/opt/ros/humble /usr/bin/cmake --install /home/jiexing/Documents/ros2_ws/src/prac_robot/build/prac_robot

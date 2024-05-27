@@ -1,0 +1,9 @@
+/home/jiexing/Documents/ros2_ws/src/prac_robot/build/prac_robot/CMakeFiles/uninstall.dir
+/home/jiexing/Documents/ros2_ws/src/prac_robot/build/prac_robot/CMakeFiles/prac_robot_uninstall.dir
+/home/jiexing/Documents/ros2_ws/src/prac_robot/build/prac_robot/CMakeFiles/test.dir
+/home/jiexing/Documents/ros2_ws/src/prac_robot/build/prac_robot/CMakeFiles/edit_cache.dir
+/home/jiexing/Documents/ros2_ws/src/prac_robot/build/prac_robot/CMakeFiles/rebuild_cache.dir
+/home/jiexing/Documents/ros2_ws/src/prac_robot/build/prac_robot/CMakeFiles/list_install_components.dir
+/home/jiexing/Documents/ros2_ws/src/prac_robot/build/prac_robot/CMakeFiles/install.dir
+/home/jiexing/Documents/ros2_ws/src/prac_robot/build/prac_robot/CMakeFiles/install/local.dir
+/home/jiexing/Documents/ros2_ws/src/prac_robot/build/prac_robot/CMakeFiles/install/strip.dir
