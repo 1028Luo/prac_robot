@@ -28,7 +28,7 @@ def generate_launch_description():
     
     # description path
     xacro_path = os.path.join(pkg_path, 'description', 'prac_robot.urdf.xacro')
-    world_path = os.path.join(pkg_path, 'description', 'messy_world.sdf')
+    world_path = os.path.join(pkg_path, 'description', 'depot_world.sdf')
 
 
     # xarco to URDF
@@ -61,7 +61,7 @@ def generate_launch_description():
         package='ros_gz_sim',
         executable='create',
         arguments=[
-            '-world', 'messy_world',
+            '-world', 'depot_world',
             '-name', 'diff_drive_robot',
             '-topic', 'robot_description', #use topic entry##
             '-x', x_pose,
@@ -118,18 +118,20 @@ def generate_launch_description():
 
 
 
+    
     slam_toolbox = IncludeLaunchDescription(
                 PythonLaunchDescriptionSource([os.path.join(
                     pkg_path,'launch','slam_online_async_map.py'
                 )])
     )
-    rviz = IncludeLaunchDescription(
-                PythonLaunchDescriptionSource([os.path.join(
-                    pkg_path,'launch','rviz_launch.py'
-                )]),
-                launch_arguments={'-d': os.path.join(pkg_path, 'config', 'explore_config.rviz')}.items(),
-    )
 
+    rviz = Node(
+        package='rviz2',
+        namespace='',
+        executable='rviz2',
+        name='rviz2',
+        arguments={'-d': os.path.join(pkg_path, 'config', 'navigate_config_2.rviz')}.items(),
+    )
 
     return LaunchDescription([
         gz_sim,

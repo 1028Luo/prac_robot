@@ -1,4 +1,4 @@
-<sdf version='1.9'> aaaaa
+<sdf version='1.9'>
   <world name='messy_world'>
     <physics name='1ms' type='ignored'>
       <max_step_size>0.001</max_step_size>
@@ -65,6 +65,243 @@
       <pose>0 0 0 0 -0 0</pose>
       <self_collide>false</self_collide>
     </model>
+    <include>
+      <uri>file:///ros2_ws/src/prac_robot/description/test_box/</uri>
+      <name>test_box _0</name>
+      <pose>3 2 0.5 0 -0 0</pose>
+    </include>
+    <include>
+      <uri>file:///ros2_ws/src/prac_robot/description/test_box/</uri>
+      <name>test_box_1</name>
+      <pose>6 2 0.5 0 -0 0</pose>
+    </include>
+    <include>
+      <uri>file:///ros2_ws/src/prac_robot/description/test_box/</uri>
+      <name>test_box_2</name>
+      <pose>9 2 0.5 0 -0 0</pose>
+    </include>
+    <include>
+      <uri>file:///ros2_ws/src/prac_robot/description/test_box/</uri>
+      <name>test_box_3</name>
+      <pose>0 2 0.5 0 -0 0</pose>
+    </include>
+    <include>
+      <uri>file:///ros2_ws/src/prac_robot/description/test_box/</uri>
+      <name>test_box _4</name>
+      <pose>1 -2 0.5 0 -0 0</pose>
+    </include>
+    <include>
+      <uri>file:///ros2_ws/src/prac_robot/description/test_box/</uri>
+      <name>test_box_5</name>
+      <pose>2 -2 0.5 0 -0 0</pose>
+    </include>
+    <include>
+      <uri>file:///ros2_ws/src/prac_robot/description/test_box/</uri>
+      <name>test_box_6</name>
+      <pose>3 -2 0.5 0 -0 0</pose>
+    </include>
+    <include>
+      <uri>file:///ros2_ws/src/prac_robot/description/test_box/</uri>
+      <name>test_box_7</name>
+      <pose>4 -2 0.5 0 -0 0</pose>
+    </include>
+    <include>
+      <uri>file:///ros2_ws/src/prac_robot/description/test_box/</uri>
+      <name>test_box_8</name>
+      <pose>4 -2 0.5 0 -0 0</pose>
+    </include>
+    <include>
+      <uri>file:///ros2_ws/src/prac_robot/description/test_box/</uri>
+      <name>test_box_9</name>
+      <pose>8 -2 0.5 0 -0 0</pose>
+    </include>
+    <include>
+      <uri>file:///ros2_ws/src/prac_robot/description/test_box/</uri>
+      <name>test_box_10</name>
+      <pose>9 -2 0.5 0 -0 0</pose>
+    </include>
+    <include>
+      <uri>file:///ros2_ws/src/prac_robot/description/test_box/</uri>
+      <name>test_box_11</name>
+      <pose>-4 -2 0.5 0 -0 0</pose>
+    </include>
+    <include>
+      <uri>file:///ros2_ws/src/prac_robot/description/test_box/</uri>
+      <name>test_box_12</name>
+      <pose>-5 -2 0.5 0 -0 0</pose>
+    </include>
+    <include>
+      <uri>file:///ros2_ws/src/prac_robot/description/test_box/</uri>
+      <name>test_box_13</name>
+      <pose>-8 -2 0.5 0 -0 0</pose>
+    </include>
+    <include>
+      <uri>file:///ros2_ws/src/prac_robot/description/test_box/</uri>
+      <name>test_box_14</name>
+      <pose>-4 -6 0.5 0 -0 0</pose>
+    </include>
+    <include>
+      <uri>file:///ros2_ws/src/prac_robot/description/test_box/</uri>
+      <name>test_box_15</name>
+      <pose>-5 -7 0.5 0 -0 0</pose>
+    </include>
+    <include>
+      <uri>file:///ros2_ws/src/prac_robot/description/test_box/</uri>
+      <name>test_box_16</name>
+      <pose>-8 -8 0.5 0 -0 0</pose>
+    </include>
+    <include>
+      <uri>file:///ros2_ws/src/prac_robot/description/test_box/</uri>
+      <name>test_box_17</name>
+      <pose>4 -6 0.5 0 -0 0</pose>
+    </include>
+    <include>
+      <uri>file:///ros2_ws/src/prac_robot/description/test_box/</uri>
+      <name>test_box_18</name>
+      <pose>5 -7 0.5 0 -0 0</pose>
+    </include>
+    <include>
+      <uri>file:///ros2_ws/src/prac_robot/description/test_box/</uri>
+      <name>test_box_19</name>
+      <pose>6 -8 0.5 0 -0 0</pose>
+    </include>
+    <include>
+      <uri>file:///ros2_ws/src/prac_robot/description/test_box/</uri>
+      <name>test_box_20</name>
+      <pose>4 5 0.5 0 -0 0</pose>
+    </include>
+    <include>
+      <uri>file:///ros2_ws/src/prac_robot/description/test_box/</uri>
+      <name>test_box_21</name>
+      <pose>5 6 0.5 0 -0 0</pose>
+    </include>
+    <include>
+      <uri>file:///ros2_ws/src/prac_robot/description/test_box/</uri>
+      <name>test_box_22</name>
+      <pose>6 7 0.5 0 -0 0</pose>
+    </include>
+    <include>
+      <uri>file:///ros2_ws/src/prac_robot/description/test_box/</uri>
+      <name>test_box_23</name>
+      <pose>4 -2 0.5 0 -0 0</pose>
+    </include>
+    <include>
+      <uri>file:///ros2_ws/src/prac_robot/description/test_box/</uri>
+      <name>test_box_24</name>
+      <pose>5 -6 0.5 0 -0 0</pose>
+    </include>
+    <include>
+      <uri>file:///ros2_ws/src/prac_robot/description/test_box/</uri>
+      <name>test_box_25</name>
+      <pose>6 -7 0.5 0 -0 0</pose>
+    </include>
+    <include>
+      <uri>file:///ros2_ws/src/prac_robot/description/test_box/</uri>
+      <name>test_box_26</name>
+      <pose>-6 2 0.5 0 -0 0</pose>
+    </include>
+    <include>
+      <uri>file:///ros2_ws/src/prac_robot/description/test_box/</uri>
+      <name>test_box_27</name>
+      <pose>-5 6 0.5 0 -0 0</pose>
+    </include>
+    <include>
+      <uri>file:///ros2_ws/src/prac_robot/description/test_box/</uri>
+      <name>test_box_28</name>
+      <pose>-6 7 0.5 0 -0 0</pose>
+    </include>
+    <include>
+      <uri>file:///ros2_ws/src/prac_robot/description/test_box/</uri>
+      <name>test_box_29</name>
+      <pose>-6 3 0.5 0 -0 0</pose>
+    </include>
+    <include>
+      <uri>file:///ros2_ws/src/prac_robot/description/test_box/</uri>
+      <name>test_box_30</name>
+      <pose>-6 4 0.5 0 -0 0</pose>
+    </include>
+    <include>
+      <uri>file:///ros2_ws/src/prac_robot/description/test_box/</uri>
+      <name>test_box_31</name>
+      <pose>-6 5 0.5 0 -0 0</pose>
+    </include>
+    <include>
+      <uri>file:///ros2_ws/src/prac_robot/description/test_box/</uri>
+      <name>test_box</name>
+      <pose>-7.0695 3.01176 0.5 0 -0 0</pose>
+    </include>
+    <include>
+      <uri>file:///ros2_ws/src/prac_robot/description/test_box/</uri>
+      <name>test_box_0</name>
+      <pose>-8.0933 2.99508 0.5 0 -0 0</pose>
+    </include>
+    <include>
+      <uri>file:///ros2_ws/src/prac_robot/description/test_box/</uri>
+      <name>test_box_4</name>
+      <pose>-0.104232 7.00156 0.5 0 -0 0</pose>
+    </include>
+    <include>
+      <uri>file:///ros2_ws/src/prac_robot/description/test_box/</uri>
+      <name>test_box_32</name>
+      <pose>-0.311101 5.94662 0.5 0 -0 0</pose>
+    </include>
+    <include>
+      <uri>file:///ros2_ws/src/prac_robot/description/test_box/</uri>
+      <name>test_box_33</name>
+      <pose>-8.0269 -3.0275 0.5 0 -0 0</pose>
+    </include>
+    <include>
+      <uri>file:///ros2_ws/src/prac_robot/description/test_box/</uri>
+      <name>test_box_34</name>
+      <pose>-1.35577 5.92838 0.5 0 -0 0</pose>
+    </include>
+    <include>
+      <uri>file:///ros2_ws/src/prac_robot/description/test_box/</uri>
+      <name>test_box_35</name>
+      <pose>0.71771 5.94684 0.5 0 -0 0</pose>
+    </include>
+    <include>
+      <uri>file:///ros2_ws/src/prac_robot/description/test_box/</uri>
+      <name>test_box_36</name>
+      <pose>-5.00438 3.02556 0.5 0 -0 0</pose>
+    </include>
+    <include>
+      <uri>file:///ros2_ws/src/prac_robot/description/test_box/</uri>
+      <name>test_box_37</name>
+      <pose>-0.074285 -6.09455 0.5 0 -0 0</pose>
+    </include>
+    <include>
+      <uri>file:///ros2_ws/src/prac_robot/description/test_box/</uri>
+      <name>test_box_38</name>
+      <pose>-0.083372 -5.21007 0.5 0 -0 0</pose>
+    </include>
+    <include>
+      <uri>file:///ros2_ws/src/prac_robot/description/test_box/</uri>
+      <name>test_box_39</name>
+      <pose>0.89753 -6.13119 0.5 0 -0 0</pose>
+    </include>
+    <include>
+      <uri>file:///ros2_ws/src/prac_robot/description/test_box/</uri>
+      <name>test_box_40</name>
+      <pose>-0.100553 -7.11487 0.5 0 -0 0</pose>
+    </include>
+    <include>
+      <uri>file:///ros2_ws/src/prac_robot/description/test_box/</uri>
+      <name>test_box_41</name>
+      <pose>-1.07124 -6.14607 0.5 0 -0 0</pose>
+    </include>
+    <include>
+      <uri>file:///ros2_ws/src/prac_robot/description/test_box/</uri>
+      <name>test_box_42</name>
+      <pose>-1.06305 1.97761 0.5 0 -0 0</pose>
+    </include>
+    <include>
+      <uri>file:///ros2_ws/src/prac_robot/description/test_box/</uri>
+      <name>test_box_43</name>
+      <pose>7.98429 -3.02138 0.5 0 -0 0</pose>  
+    </include>
+
+
     <light name='sun' type='directional'>
       <pose>0 0 10 0 -0 0</pose>
       <cast_shadows>true</cast_shadows>
@@ -86,4 +323,3 @@
     </light>
   </world>
 </sdf>
-
