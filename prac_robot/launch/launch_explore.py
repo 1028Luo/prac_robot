@@ -130,7 +130,7 @@ def generate_launch_description():
         namespace='',
         executable='rviz2',
         name='rviz2',
-        arguments={'-d': os.path.join(pkg_path, 'config', 'navigate_config_2.rviz')}.items(),
+        arguments={'-d': os.path.join(pkg_path, 'config', 'explore_config.rviz')}.items(),
     )
 
     return LaunchDescription([
