@@ -47,7 +47,7 @@ def generate_launch_description():
     x_pose = LaunchConfiguration('x_pose', default='0.0')
     y_pose = LaunchConfiguration('y_pose', default='0.0')
     z_pose = LaunchConfiguration('z_pose', default='2.0')
-
+    Y_pose = LaunchConfiguration('Y_pose', default='0.0')
 
     # launch gazebo with environment
     gz_sim = IncludeLaunchDescription(
@@ -66,11 +66,16 @@ def generate_launch_description():
             '-topic', 'robot_description', #use topic entry##
             '-x', x_pose,
             '-y', y_pose,
-            '-z', z_pose
+            '-z', z_pose,
+            '-Y', Y_pose
         ],
         output='screen',
     )
     
+
+
+
+    '''
     # launch joint_state_broadcaster 
     load_joint_state_controller = ExecuteProcess(
         cmd=['ros2', 'control', 'load_controller', '--set-state', 'active',
@@ -85,6 +90,32 @@ def generate_launch_description():
              'diff_drive_base_controller'],
         output='screen'
     )
+    '''
+
+    #robot_description = Command(['ros2 param get --hide-type /robot_state_publisher robot_description'])
+    controller_params_file = os.path.join(pkg_path,'config','prac_controller.yaml')
+
+    controller_manager = Node(
+        package='controller_manager',
+        executable= 'ros2_control_node',
+        parameters=[{'robot_description': robot_description_config}, controller_params_file]
+    )
+
+
+    joint_state_broadcaster_spawner = Node(
+        package="controller_manager",
+        executable="spawner",
+        arguments=["joint_state_broadcaster"],
+    )
+
+    diff_drive_spawner = Node(
+        package="controller_manager",
+        executable="spawner",
+        arguments=["diff_drive_base_controller"],
+    )
+
+
+
 
     # need this bridge, otherwise control 2 teleop won't work
     clock_bridge = Node(
@@ -103,9 +134,7 @@ def generate_launch_description():
 
     )
 
-
     # ros2 run teleop_twist_keyboard teleop_twist_keyboard --ros-args -r /cmd_vel:=/diff_drive_base_controller/cmd_vel_unstamped
-
     keyboardControl = Node(
         package='teleop_twist_keyboard',
         executable= 'teleop_twist_keyboard',
@@ -116,9 +145,6 @@ def generate_launch_description():
 
     )
 
-
-
-    
     slam_toolbox = IncludeLaunchDescription(
                 PythonLaunchDescriptionSource([os.path.join(
                     pkg_path,'launch','slam_online_async_map.py'
@@ -133,6 +159,7 @@ def generate_launch_description():
         arguments={'-d': os.path.join(pkg_path, 'config', 'explore_config.rviz')}.items(),
     )
 
+
     return LaunchDescription([
         gz_sim,
         gz_create,
@@ -146,19 +173,8 @@ def generate_launch_description():
         'use_sim_time',
         default_value='true',
         description='Use sim time if true'),
-        
-        RegisterEventHandler(
-            event_handler=OnProcessExit(
-                target_action=gz_create,
-                on_exit=[load_joint_state_controller],
-            )
-        ),
-
-        RegisterEventHandler(
-            event_handler=OnProcessExit(
-                target_action=load_joint_state_controller,
-                on_exit=[load_diff_drive_controller],
-            )
-        ),
+        controller_manager,
+        joint_state_broadcaster_spawner,
+        diff_drive_spawner,
         rviz
     ])
