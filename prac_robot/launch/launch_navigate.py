@@ -28,7 +28,7 @@ def generate_launch_description():
     
     # description path
     xacro_path = os.path.join(pkg_path, 'description', 'prac_robot.urdf.xacro')
-    world_path = os.path.join(pkg_path, 'description', 'messy_world.sdf')
+    world_path = os.path.join(pkg_path, 'description', 'depot_world.sdf')
 
 
     # xarco to URDF
@@ -61,7 +61,7 @@ def generate_launch_description():
         package='ros_gz_sim',
         executable='create',
         arguments=[
-            '-world', 'messy_world',
+            '-world', 'depot_world',
             '-name', 'diff_drive_robot',
             '-topic', 'robot_description', #use topic entry##
             '-x', x_pose,
@@ -131,6 +131,29 @@ def generate_launch_description():
                 )])
     )
 
+    #robot_description = Command(['ros2 param get --hide-type /robot_state_publisher robot_description'])
+    controller_params_file = os.path.join(pkg_path,'config','prac_controller.yaml')
+
+    controller_manager = Node(
+        package='controller_manager',
+        executable= 'ros2_control_node',
+        parameters=[{'robot_description': robot_description_config}, controller_params_file]
+    )
+
+
+    joint_state_broadcaster_spawner = Node(
+        package="controller_manager",
+        executable="spawner",
+        arguments=["joint_state_broadcaster"],
+    )
+
+    diff_drive_spawner = Node(
+        package="controller_manager",
+        executable="spawner",
+        arguments=["diff_drive_base_controller"],
+    )
+
+
 
     return LaunchDescription([
         gz_sim,
@@ -145,19 +168,9 @@ def generate_launch_description():
         default_value='true',
         description='Use sim time if true'),
         
-        RegisterEventHandler(
-            event_handler=OnProcessExit(
-                target_action=gz_create,
-                on_exit=[load_joint_state_controller],
-            )
-        ),
-
-        RegisterEventHandler(
-            event_handler=OnProcessExit(
-                target_action=load_joint_state_controller,
-                on_exit=[load_diff_drive_controller],
-            )
-        ),
+        controller_manager,
+        joint_state_broadcaster_spawner,
+        diff_drive_spawner,
         rviz,
         AMCL
     ])

@@ -173,6 +173,7 @@ def generate_launch_description():
         'use_sim_time',
         default_value='true',
         description='Use sim time if true'),
+        
         controller_manager,
         joint_state_broadcaster_spawner,
         diff_drive_spawner,
