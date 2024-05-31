@@ -15,6 +15,7 @@ RUN apt-get update && apt-get install -y \
     ros-humble-ros2-control \
     ros-humble-ros2-controllers \
     ros-humble-ign-ros2-control\
+    ros-humble-rqt-graph\
     && rm -rf /var/lib/apt/lists/*
 
 RUN rosdep update

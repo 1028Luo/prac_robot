@@ -137,7 +137,8 @@ private:
 
             // get path from Astar
             std::list<point *> path_points = myAstar.getPath(start, dest);
-
+            std::cout << "Planning finished" << std::endl;
+            
             // show path and insert path to path_msg
             std::string frameID = "map";
             for (auto &p : path_points) {

@@ -128,7 +128,7 @@ point *Astar::findPath(point &start, point &dest){
     openList.push_back(new point(start.x, start.y));
 
     while (!openList.empty()){
-
+        std::cout << "A*: planning" << std::endl;
         auto q = getLowestF();
         
         openList.remove(q);

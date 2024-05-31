@@ -10,11 +10,16 @@
 // return the corresponding map point on map
 point pose2map(double poseX, double poseY){
     
-    // depending on map
+    // these parameters come from map_name.yaml
     double resolution = 0.05;
     double scailing = 1/resolution; 
-    int x_offset = 284;
-    int y_offset = 210;
+
+    double origin_x = -8;
+    auto x_offset = (-1) * (origin_x / resolution);
+
+    double origin_y = -6.67;
+    auto y_offset = (-1) * (origin_y / resolution);
+
     int map_idx_X =  round(scailing*poseX + x_offset);
     int map_idx_Y =  round(scailing*poseY + y_offset);
 
@@ -27,7 +32,9 @@ double map2poseX(int map_idx_X){
 
     double resolution = 0.05;
     double scailing = 1/resolution; 
-    int x_offset = 284;
+
+    double origin_x = -8;
+    auto x_offset = (-1) * (origin_x / resolution);
 
     double poseX = (map_idx_X - x_offset) / scailing;
     
@@ -38,7 +45,9 @@ double map2poseY(int map_idx_Y){
 
     double resolution = 0.05;
     double scailing = 1/resolution; 
-    int y_offset = 210;
+
+    double origin_y = -6.67;
+    auto y_offset = (-1) * (origin_y / resolution);
 
     double poseY = (map_idx_Y - y_offset) / scailing;
     

@@ -28,7 +28,7 @@ def generate_launch_description():
     
     # description path
     xacro_path = os.path.join(pkg_path, 'description', 'prac_robot.urdf.xacro')
-    world_path = os.path.join(pkg_path, 'description', 'depot_world.sdf')
+    world_path = os.path.join(pkg_path, 'description', 'messy_world.sdf')
 
 
     # xarco to URDF
@@ -61,7 +61,7 @@ def generate_launch_description():
         package='ros_gz_sim',
         executable='create',
         arguments=[
-            '-world', 'depot_world',
+            '-world', 'messy_world',
             '-name', 'diff_drive_robot',
             '-topic', 'robot_description', #use topic entry##
             '-x', x_pose,
@@ -73,24 +73,6 @@ def generate_launch_description():
     )
     
 
-
-
-    '''
-    # launch joint_state_broadcaster 
-    load_joint_state_controller = ExecuteProcess(
-        cmd=['ros2', 'control', 'load_controller', '--set-state', 'active',
-             'joint_state_broadcaster'],
-        output='screen'
-    )
-
-
-    # launch diff_drive_base_controller
-    load_diff_drive_controller = ExecuteProcess(
-        cmd=['ros2', 'control', 'load_controller', '--set-state', 'active',
-             'diff_drive_base_controller'],
-        output='screen'
-    )
-    '''
 
     #robot_description = Command(['ros2 param get --hide-type /robot_state_publisher robot_description'])
     controller_params_file = os.path.join(pkg_path,'config','prac_controller.yaml')
