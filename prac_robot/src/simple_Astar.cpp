@@ -55,7 +55,7 @@ bool Astar::isValid(const point* curr, const point* next) const{
 
     if(next->x < 0 || next->x > grid.size() - 1 // out of bound
     || next->y < 0 || next->y > grid[0].size() - 1
-    || checkFootprintCollision(next) // obstacle
+    //|| checkFootprintCollision(next) // obstacle
     || (next->x == curr->x && next->y == curr->y) // curr is next
     || isInList(closedList, next) // is in closedList
     ) {
@@ -126,11 +126,15 @@ std::list<point *> Astar::getPath(point &start, point &dest){
 point *Astar::findPath(point &start, point &dest){
 
     openList.push_back(new point(start.x, start.y));
+    int counter = 0;
+    while (!openList.empty() && counter < 10000){
 
-    while (!openList.empty()){
-        std::cout << "A*: planning" << std::endl;
+        std::cout << "A*: step: " << counter << std::endl;
+        counter++;
         auto q = getLowestF();
         
+        std::cout << "current node is " << q->x << "  y:" << q->y << std::endl;
+
         openList.remove(q);
         closedList.push_back(q);
         auto successorsVec = getSuccessor(q);

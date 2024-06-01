@@ -156,7 +156,7 @@ private:
             std::cout << std::endl;
             
             // show path
-            //showPath(map, path_points);
+            showPath(map, path_points);
 
             // publish path
             path_publisher_->publish(path_msg);
@@ -184,7 +184,9 @@ private:
         }
 
         for (auto p : path_points){
-            image.at<uchar>(p->x, p->y) = 1;
+            image.at<uchar>(p->y, p->x) = 255;
+            image.at<uchar>(p->y + 1, p->x + 1) = 255;
+            image.at<uchar>(p->y - 1, p->x - 1) = 255;
         }
 
         // Create a mirrored image
@@ -192,10 +194,10 @@ private:
         flip(image, mirroredImage, 1); // Flip horizontally (1)
 
         // Rotate the image clockwise by 90 degrees
-        Mat rotatedImage;
-        rotate(mirroredImage, rotatedImage, ROTATE_90_CLOCKWISE);
+        //Mat rotatedImage;
+        //rotate(mirroredImage, rotatedImage, ROTATE_90_CLOCKWISE);
 
-        imshow("path", rotatedImage);
+        imshow("path", mirroredImage);
         waitKey(0);
 
 
