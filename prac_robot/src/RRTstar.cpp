@@ -179,39 +179,3 @@ point *Astar::findPath(point &start, point &dest){
     std::cout << "Astar: planning failed!" << std::endl;
     return NULL;
 }
-
-/*
-void Astar::showExploration(point *p){
-
-
-        int rows = grid.size();
-        int cols = grid[0].size();
-        Mat image(rows, cols, CV_8UC1); // Create a grayscale image
-
-        // Loop through the vector and set pixel values
-        for (int i = 0; i < rows; ++i) {
-            for (int j = 0; j < cols; ++j) {
-
-                // Assign the value from the vector to the corresponding pixel
-                image.at<uchar>(i, j) = static_cast<uchar>(grid[i][j]);
-            }
-        }
-
-        
-        image.at<uchar>(p->y, p->x) = 255;
-        image.at<uchar>(p->y + 1, p->x + 1) = 255;
-        image.at<uchar>(p->y - 1, p->x - 1) = 255;
-
-
-        // Create a mirrored image
-        Mat mirroredImage;
-        flip(image, mirroredImage, 1); // Flip horizontally (1)
-
-        // Rotate the image clockwise by 90 degrees
-        //Mat rotatedImage;
-        //rotate(mirroredImage, rotatedImage, ROTATE_90_CLOCKWISE);
-
-        imshow("path", mirroredImage);
-        sleep(1);
-}
-*/
