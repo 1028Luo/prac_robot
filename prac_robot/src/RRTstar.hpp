@@ -1,54 +1,76 @@
 #pragma once
 #include <iostream>
 #include <vector>
-#include <list>
-#include <math.h>
+
 
 
 const int normal_cost = 2;
 const int diagonal_cost = 3;
 
-struct point{
+struct Point{
     int x,y;
-    int F,G,H;
-    point *parent;
+
 
     // constructor
-    point():x(0), y(0), F(0), G(0), H(0), parent(NULL){}
-    point(int _x, int _y) :x(_x), y(_y), F(0), G(0), H(0), parent(NULL){}
+    Point(int _x, int _y) :x(_x), y(_y){}
 };
 
-class Astar{
+struct Node{
+
+    std::vector<Node*> children;
+    Node* parent;
+    Point position;
+    float cost;
+
+    Node(Point _position) :children(NULL), parent(NULL), position(_position), cost(0){}
+
+};
+
+
+
+
+class RRTstar{
 
 
 public:
     // use default constructor
 
-    void initAstar(std::vector<std::vector<int>> & _grid); // init
-    point *findPath(point &start, point &dest); // return true if path is found
-    std::list<point *> getPath(point &start, point &dest);
+    void initRRTstar(std::vector<std::vector<int>> & _grid);
 
-    // return true if the next point is in the map and not an obstacle
-    bool isValid(const point* curr, const point* next) const; 
-    bool checkFootprintCollision(const point* next) const; 
+    // main search function
+    std::vector<Point> search();
 
-    std::vector<point *> getSuccessor(point *any); // get all surrounding points
-    point *isInList(const std::list<point *> &list, const point *any) const;
+    // generates a random node
+    Node genRandomNode();
 
-    int getG(point *start, point *any); // g: cost from start to point
-    int getH(point *any, point *dest); // h: point to destination
-    int getF(point *any);
+    Node findNearest(Node node);
 
-    point *getLowestF();
+    float getDistance(const Point p, const Point q);
 
-    void showExploration(point *p);
+    bool checkObstacle(const Node p, const Node q);
+
+    bool reachNode(const Node p);
+
+    bool rewire();
+    
+    bool reachedDest();
+
+    // given a node, return the path from root to this node
+    std::vector<Point> generatePath(Node* node); 
+
 
 
 private:
+
+    std::vector<Node*> bestPath;
+    Node* root;
     std::vector<std::vector<int>> grid;
 
-    std::list<point *> openList;
-    std::list<point *> closedList;
+    int itr_max;
+    int itr;
 
-    int footprintSize = 5;
+    Node* lastNodeAdded;
+    
+
+
 };
